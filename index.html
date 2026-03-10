@@ -413,9 +413,10 @@
 
     // ================= GURU LOGIC =================
     async function LoadGuruHome() {
+      // Kirim guru_id saat meminta data
       const [soalRes, jawabanRes] = await Promise.all([
         api('getSoal', { guru_id: STATE.user.id }),
-        api('getJawaban', {})
+        api('getJawaban', { guru_id: STATE.user.id }) // <= PERUBAHAN: Kirim ID Guru
       ]);
       
       STATE.soal = soalRes.success ? soalRes.data : [];
@@ -516,7 +517,8 @@
     }
 
     async function LoadPenilaian() {
-      const res = await api('getJawaban', {});
+      // Kirim guru_id untuk filter jawaban
+      const res = await api('getJawaban', { guru_id: STATE.user.id }); // <= PERUBAHAN: Kirim ID Guru
       const list = $('list-jawaban');
       const data = res.success ? res.data : [];
       const pending = data.filter(j => !j.nilai);
@@ -647,3 +649,4 @@
   </script>
 </body>
 </html>
+
