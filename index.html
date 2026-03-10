@@ -13,116 +13,51 @@
       theme: {
         extend: {
           fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] },
-          colors: {
-            brand: {
-              light: '#e0f2fe',
-              DEFAULT: '#0ea5e9', // Sky 500
-              dark: '#0369a1',    // Sky 700
-            }
-          }
+          colors: { brand: { light: '#e0f2fe', DEFAULT: '#0ea5e9', dark: '#0369a1' } }
         }
       }
     }
   </script>
 
   <style>
-    /* Tema Warna Baru: Soft & Contrasty */
-    body { 
-      font-family: 'Plus Jakarta Sans', sans-serif; 
-      background: #f1f5f9; /* Slate 100 - Soft Grey */
-      color: #1e293b; /* Slate 800 */
-    }
-    
-    /* Background Pattern subtle */
-    .bg-pattern {
-      background-color: #f1f5f9;
-      background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
-      background-size: 20px 20px;
-    }
-
-    /* Efek Blob yang lebih soft */
-    .blob { 
-      position: fixed; 
-      border-radius: 50%; 
-      filter: blur(80px); 
-      opacity: 0.4; 
-      animation: float 20s infinite; 
-      z-index: 0; 
-      pointer-events: none;
-    }
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f1f5f9; color: #1e293b; }
+    .bg-pattern { background-color: #f1f5f9; background-image: radial-gradient(#cbd5e1 1px, transparent 1px); background-size: 20px 20px; }
+    .blob { position: fixed; border-radius: 50%; filter: blur(80px); opacity: 0.4; animation: float 20s infinite; z-index: 0; pointer-events: none; }
     .blob-1 { width: 600px; height: 600px; background: #bae6fd; top: -200px; left: -100px; }
     .blob-2 { width: 500px; height: 500px; background: #bbf7d0; bottom: -100px; right: -100px; animation-delay: -5s; }
     @keyframes float { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(20px, 20px); } }
 
-    /* Page Logic */
     .page { display: none; opacity: 0; transition: opacity 0.3s ease; }
     .page.active { display: block; opacity: 1; }
     .page.active.is-flex { display: flex; }
 
-    /* Card System - Lebih Kontras */
-    .card {
-      background: white;
-      border-radius: 1rem;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-      border: 1px solid #e2e8f0; /* Slate 200 */
-    }
-    .card-hover:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.01);
-    }
+    .card { background: white; border-radius: 1rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border: 1px solid #e2e8f0; }
+    .card-hover:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08); }
 
-    /* Button - Lebih Solid */
-    .btn-brand {
-      background: linear-gradient(135deg, #0ea5e9 0%, #14b8a6 100%);
-      transition: all 0.2s;
-      color: white;
-      font-weight: 600;
-    }
-    .btn-brand:hover {
-      filter: brightness(1.1);
-      box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
-    }
+    .btn-brand { background: linear-gradient(135deg, #0ea5e9 0%, #14b8a6 100%); transition: all 0.2s; color: white; font-weight: 600; }
+    .btn-brand:hover { filter: brightness(1.1); box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3); }
     
-    /* Input - Clean Look */
-    .input-field {
-      background: #f8fafc; /* Slate 50 */
-      border: 1px solid #e2e8f0; /* Slate 200 */
-      transition: all 0.2s;
-    }
-    .input-field:focus {
-      background: white;
-      border-color: #0ea5e9;
-      box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
-      outline: none;
-    }
+    .input-field { background: #f8fafc; border: 1px solid #e2e8f0; transition: all 0.2s; }
+    .input-field:focus { background: white; border-color: #0ea5e9; box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1); outline: none; }
 
-    /* Sidebar Dark Mode */
-    .sidebar-dark {
-      background: #1e293b; /* Slate 800 */
-      color: white;
-    }
+    .sidebar-dark { background: #1e293b; color: white; }
     .sidebar-dark .nav-item:hover { background: rgba(255,255,255,0.1); }
-    .sidebar-dark .nav-item.active { 
-      background: rgba(255,255,255,0.1); 
-      border-left: 4px solid #0ea5e9; 
-    }
+    .sidebar-dark .nav-item.active { background: rgba(255,255,255,0.1); border-left: 4px solid #0ea5e9; }
 
-    /* Loading Overlay */
     .loading-overlay { position: fixed; inset: 0; background: rgba(255,255,255,0.9); display: flex; align-items: center; justify-content: center; z-index: 999; display: none; }
     .spinner { width: 40px; height: 40px; border: 4px solid #e2e8f0; border-top-color: #0ea5e9; border-radius: 50%; animation: spin 0.8s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
+    
+    /* Custom File Input */
+    .file-input-label { cursor: pointer; transition: all 0.2s; }
+    .file-input-label:hover { background: #f1f5f9; }
   </style>
 </head>
 <body class="bg-pattern overflow-x-hidden">
 
-  <!-- Background Effects -->
   <div class="blob blob-1"></div>
   <div class="blob blob-2"></div>
-
-  <!-- Loading Overlay -->
   <div id="loading-overlay"><div class="spinner"></div></div>
-
-  <!-- Toast -->
   <div id="toast" class="fixed top-5 right-5 z-50 hidden"></div>
 
   <!-- ================= LOGIN PAGE ================= -->
@@ -140,7 +75,6 @@
           <button onclick="switchTab('siswa')" id="btn-tab-siswa" class="flex-1 py-2 rounded-md text-sm font-semibold transition text-slate-400">Siswa</button>
         </div>
 
-        <!-- Form Guru -->
         <form id="form-guru" onsubmit="LoginGuru(event)" class="space-y-4">
           <div>
             <label class="text-sm text-slate-600 font-medium">Email</label>
@@ -153,7 +87,6 @@
           <button type="submit" class="btn-brand w-full py-2.5 rounded-lg">Masuk Guru</button>
         </form>
 
-        <!-- Form Siswa -->
         <form id="form-siswa" onsubmit="LoginSiswa(event)" class="space-y-4 hidden">
           <div>
             <label class="text-sm text-slate-600 font-medium">NISN / ID Siswa</label>
@@ -169,7 +102,6 @@
   <!-- ================= DASHBOARD GURU ================= -->
   <div id="page-guru" class="page min-h-screen relative z-10">
     <div class="flex">
-      <!-- Sidebar Dark -->
       <aside id="sidebar" class="fixed left-0 top-0 h-full w-64 sidebar-dark transform -translate-x-full lg:translate-x-0 transition-transform z-40">
         <div class="p-6 border-b border-slate-700">
           <h2 class="font-bold text-lg">Dashboard</h2>
@@ -185,14 +117,11 @@
         <button onclick="Logout()" class="absolute bottom-6 left-6 right-6 py-2 text-red-400 text-sm hover:bg-red-500/10 rounded-lg border border-red-500/20">Keluar</button>
       </aside>
 
-      <!-- Main Content -->
       <main class="flex-1 lg:ml-64 p-6 lg:p-10 min-h-screen">
-        <!-- Mobile Header -->
         <button onclick="toggleSidebar()" class="lg:hidden mb-6 p-2 bg-white rounded-lg shadow border border-slate-200">
           <svg class="w-6 h-6 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
         </button>
 
-        <!-- Sections -->
         <section id="guru-home">
           <div class="bg-gradient-to-r from-sky-600 to-teal-500 rounded-2xl p-6 mb-6 text-white shadow-lg">
             <h1 class="text-2xl font-bold">Selamat Datang</h1>
@@ -213,6 +142,20 @@
               <select id="add-kelas" required class="input-field rounded-lg p-2.5 text-sm"><option value="">Kelas</option><option>X</option><option>XI</option><option>XII</option></select>
               <select id="add-jurusan" required class="input-field rounded-lg p-2.5 text-sm"><option value="">Jurusan</option><option>ATP</option><option>ATU</option><option>APPL</option><option>SEMUA</option></select>
             </div>
+            
+            <!-- Upload Gambar Soal -->
+            <div>
+              <label class="block text-sm font-medium text-slate-700 mb-1">Gambar Soal (Opsional)</label>
+              <div class="flex items-center gap-3">
+                 <label class="file-input-label flex items-center gap-2 px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-600 hover:text-sky-600">
+                   <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                   <span id="file-name-guru">Pilih File</span>
+                   <input type="file" id="file-guru" accept="image/*" class="hidden" onchange="handleFileSelect(this, 'preview-guru', 'file-name-guru')">
+                 </label>
+                 <img id="preview-guru" class="h-16 rounded shadow hidden">
+              </div>
+            </div>
+
             <textarea id="add-text" rows="4" required class="input-field w-full rounded-lg p-3 text-sm" placeholder="Tulis soal esai di sini..."></textarea>
             <div class="grid grid-cols-2 gap-3">
                <input type="number" id="add-waktu" value="60" class="input-field rounded-lg p-2.5 text-sm" placeholder="Waktu (Menit)">
@@ -257,7 +200,6 @@
         <button onclick="Logout()" class="text-red-500 text-sm font-medium hover:bg-red-50 p-2 rounded">Keluar</button>
       </div>
 
-      <!-- Input Token -->
       <div class="bg-gradient-to-r from-sky-600 to-teal-500 rounded-xl p-6 text-white mb-8 shadow-lg">
         <h2 class="font-bold mb-3">Mulai Ujian</h2>
         <form onsubmit="MulaiUjian(event)" class="flex gap-2">
@@ -266,7 +208,6 @@
         </form>
       </div>
 
-      <!-- Riwayat -->
       <h3 class="font-bold text-slate-700 mb-3">Riwayat Nilai</h3>
       <div id="list-nilai" class="card p-4 space-y-2"></div>
     </div>
@@ -282,12 +223,27 @@
       
       <div class="card p-6 mb-6">
         <h2 class="font-bold text-lg mb-2 text-slate-800">Soal</h2>
-        <div id="uj-soal" class="text-slate-600 leading-relaxed border-l-4 border-sky-500 pl-4"></div>
+        <div id="uj-soal" class="text-slate-600 leading-relaxed border-l-4 border-sky-500 pl-4 mb-4"></div>
+        <img id="uj-soal-img" class="max-w-full rounded-lg hidden">
       </div>
 
       <div class="card p-6">
         <h2 class="font-bold mb-2 text-slate-800">Jawaban</h2>
-        <textarea id="uj-jawaban" rows="8" class="input-field w-full rounded-lg p-3 text-sm" placeholder="Ketik jawaban..."></textarea>
+        <textarea id="uj-jawaban" rows="6" class="input-field w-full rounded-lg p-3 text-sm" placeholder="Ketik jawaban..."></textarea>
+        
+        <!-- Upload Gambar Jawaban -->
+        <div class="mt-3">
+          <label class="block text-sm font-medium text-slate-700 mb-1">Foto Jawaban (Opsional)</label>
+          <div class="flex items-center gap-3">
+             <label class="file-input-label flex items-center gap-2 px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-600 hover:text-sky-600 cursor-pointer">
+               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+               <span id="file-name-siswa">Ambil Foto</span>
+               <input type="file" id="file-siswa" accept="image/*" class="hidden" onchange="handleFileSelect(this, 'preview-siswa', 'file-name-siswa')">
+             </label>
+             <img id="preview-siswa" class="h-16 rounded shadow hidden">
+          </div>
+        </div>
+
         <button onclick="SubmitUjian()" class="btn-brand w-full mt-4 py-3 rounded-lg">Submit Jawaban</button>
       </div>
     </div>
@@ -307,7 +263,7 @@
 
   <script>
     // ================= KONFIGURASI =================
-    const API_URL = 'https://script.google.com/macros/s/AKfycbygirtQzAchte6NUOvr1lUx_5CrYmvV7ZzV8Y9jbGdfmmCutduPyztpkhr_b09O_8cA7g/exec'; // GANTI INI !!!
+    const API_URL = 'MASUKKAN_URL_WEB_APP_ANDA_DISINI'; // GANTI INI !!!
     
     const $ = id => document.getElementById(id);
     const STATE = { user: null, soal: [], current: null, timer: null, time: 0 };
@@ -320,7 +276,7 @@
         const json = await res.json();
         return json;
       } catch(e) {
-        return { success: false, message: 'Koneksi gagal. Cek URL API.' };
+        return { success: false, message: 'Koneksi gagal.' };
       } finally {
         $('loading-overlay').style.display = 'none';
       }
@@ -341,6 +297,34 @@
       setTimeout(() => c.classList.add('hidden'), 3000);
     }
 
+    // ================= SESSION HANDLING (REFRESH FIX) =================
+    function SaveSession(data) {
+      localStorage.setItem('ujian_user', JSON.stringify(data));
+    }
+
+    function LoadSession() {
+      const data = localStorage.getItem('ujian_user');
+      if (data) {
+        STATE.user = JSON.parse(data);
+        return true;
+      }
+      return false;
+    }
+
+    // Run on start
+    if (LoadSession()) {
+      if (STATE.user.role === 'guru') {
+        $('guru-name').innerText = STATE.user.nama;
+        LoadGuruHome();
+        Navigate('guru');
+      } else {
+        $('siswa-nama').innerText = STATE.user.nama;
+        $('siswa-info').innerText = `Kelas ${STATE.user.kelas} - ${STATE.user.jurusan}`;
+        LoadSiswaHome();
+        Navigate('siswa');
+      }
+    }
+
     // ================= AUTH =================
     function switchTab(t) {
       $('form-guru').classList.toggle('hidden', t !== 'guru');
@@ -359,6 +343,7 @@
       const res = await api('loginGuru', { email: $('guru-email').value, password: $('guru-pass').value });
       if(res.success) {
         STATE.user = { ...res.data, role: 'guru' };
+        SaveSession(STATE.user);
         $('guru-name').innerText = res.data.nama;
         LoadGuruHome();
         Navigate('guru');
@@ -371,6 +356,7 @@
       const res = await api('loginSiswa', { id: $('siswa-nisn').value });
       if(res.success) {
         STATE.user = { ...res.data, role: 'siswa' };
+        SaveSession(STATE.user);
         $('siswa-nama').innerText = res.data.nama;
         $('siswa-info').innerText = `Kelas ${res.data.kelas} - ${res.data.jurusan}`;
         LoadSiswaHome();
@@ -381,8 +367,48 @@
 
     function Logout() {
       STATE.user = null;
+      localStorage.removeItem('ujian_user'); // Hapus session
       clearInterval(STATE.timer);
       Navigate('login');
+    }
+
+    // ================= FILE HANDLING (UPLOAD) =================
+    async function handleFileSelect(input, previewId, nameId) {
+      const file = input.files[0];
+      if (!file) return;
+
+      // Show preview
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        $(previewId).src = e.target.result;
+        $(previewId).classList.remove('hidden');
+      };
+      reader.readAsDataURL(file);
+      
+      $(nameId).innerText = file.name.length > 15 ? file.name.substring(0,15)+'...' : file.name;
+    }
+
+    async function processUpload(fileInput) {
+      if (!fileInput.files[0]) return null;
+      
+      const file = fileInput.files[0];
+      const reader = new FileReader();
+      
+      return new Promise((resolve, reject) => {
+        reader.onload = async function(e) {
+          const base64 = e.target.result;
+          const fileName = 'img_' + new Date().getTime() + '.' + file.name.split('.').pop();
+          
+          // Panggil API upload
+          const res = await api('uploadImage', { base64: base64, fileName: fileName });
+          if (res.success) {
+            resolve(res.url);
+          } else {
+            reject(res.message);
+          }
+        };
+        reader.readAsDataURL(file);
+      });
     }
 
     // ================= GURU LOGIC =================
@@ -404,10 +430,6 @@
       ['home', 'soal', 'bank', 'token', 'nilai'].forEach(p => $(`guru-${p}`).classList.add('hidden'));
       $(`guru-${page}`).classList.remove('hidden');
       
-      // Update Active Nav
-      document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
-      event.target.classList.add('active');
-
       if(page === 'bank') RenderBankSoal();
       if(page === 'token') LoadTokenOptions();
       if(page === 'nilai') LoadPenilaian();
@@ -415,17 +437,38 @@
 
     async function BuatSoal(e) {
       e.preventDefault();
+      Toast('Menyimpan soal...', 'success');
+      
+      let imageUrl = '';
+      // Cek jika ada gambar
+      if ($('file-guru').files[0]) {
+        try {
+          imageUrl = await processUpload($('file-guru'));
+        } catch (err) {
+          Toast('Gagal upload gambar: ' + err, 'error');
+          return;
+        }
+      }
+
       const data = {
         guru_id: STATE.user.id,
         mapel: $('add-mapel').value,
         kelas: $('add-kelas').value,
         jurusan: $('add-jurusan').value,
         soal_text: $('add-text').value,
+        soal_image: imageUrl,
         waktu: $('add-waktu').value
       };
+
       const res = await api('createSoal', data);
       if(res.success) {
         Toast('Soal disimpan');
+        // Reset form
+        $('add-text').value = '';
+        $('preview-guru').classList.add('hidden');
+        $('file-name-guru').innerText = 'Pilih File';
+        $('file-guru').value = '';
+        
         LoadGuruHome();
         PageGuru('bank');
       } else Toast(res.message, 'error');
@@ -439,6 +482,7 @@
             <span class="text-xs px-2 py-1 rounded font-medium ${s.status === 'released' ? 'bg-green-100 text-green-700' : 'bg-slate-100 text-slate-500'}">${s.status === 'released' ? s.token : 'Draft'}</span>
             <p class="font-medium mt-1 text-slate-800">${s.mapel} (${s.kelas} - ${s.jurusan})</p>
             <p class="text-sm text-slate-500 truncate max-w-md">${s.soal_text}</p>
+            ${s.soal_image ? '<span class="text-xs text-sky-500">+ Ada Gambar</span>' : ''}
           </div>
           <button onclick="HapusSoal('${s.id}')" class="text-red-400 hover:bg-red-50 p-2 rounded text-xs font-medium">Hapus</button>
         </div>
@@ -467,7 +511,7 @@
       if(res.success) {
         $('hasil-token').classList.remove('hidden');
         $('txt-token').innerText = res.data.token;
-        LoadGuruHome(); // refresh stats
+        LoadGuruHome(); 
       }
     }
 
@@ -485,7 +529,8 @@
             <h3 class="font-bold text-slate-800">${j.nama_siswa}</h3>
             <span class="text-xs bg-slate-100 text-slate-600 px-2 py-1 rounded">${j.kelas} ${j.jurusan}</span>
           </div>
-          <p class="text-sm text-slate-600 bg-slate-50 p-3 rounded mb-3 border">${j.jawaban_text || '<i>Tidak ada jawaban</i>'}</p>
+          <p class="text-sm text-slate-600 bg-slate-50 p-3 rounded mb-3 border">${j.jawaban_text || '<i>Tidak ada jawaban teks</i>'}</p>
+          ${j.jawaban_foto ? `<a href="${j.jawaban_foto}" target="_blank" class="text-xs text-sky-500 underline block mb-3">Lihat Foto Jawaban</a>` : ''}
           <div class="flex gap-2">
             <input type="number" id="n-${j.id}" placeholder="Nilai" class="input-field rounded p-2 w-24 text-sm">
             <button onclick="SimpanNilai('${j.id}')" class="btn-brand px-4 rounded text-sm">Simpan</button>
@@ -528,7 +573,19 @@
         STATE.current = res.data;
         $('uj-mapel').innerText = res.data.mapel;
         $('uj-soal').innerText = res.data.soal_text;
+        
+        // Tampilkan gambar soal jika ada
+        if(res.data.soal_image) {
+          $('uj-soal-img').src = res.data.soal_image;
+          $('uj-soal-img').classList.remove('hidden');
+        } else {
+          $('uj-soal-img').classList.add('hidden');
+        }
+
         $('uj-jawaban').value = '';
+        $('preview-siswa').classList.add('hidden');
+        $('file-name-siswa').innerText = 'Ambil Foto';
+        $('file-siswa').value = '';
         
         // Timer
         STATE.time = (res.data.waktu || 60) * 60;
@@ -551,25 +608,39 @@
     async function SubmitUjian() {
       if(!confirm('Yakin submit jawaban?')) return;
       
+      Toast('Mengirim jawaban...', 'success');
+      
+      let fotoUrl = '';
+      // Upload foto jawaban jika ada
+      if ($('file-siswa').files[0]) {
+        try {
+          fotoUrl = await processUpload($('file-siswa'));
+        } catch (err) {
+          Toast('Gagal upload foto jawaban', 'error');
+          return;
+        }
+      }
+      
       const data = {
         token: STATE.current.token,
         siswa_id: STATE.user.id,
         nama_siswa: STATE.user.nama,
         kelas: STATE.user.kelas,
         jurusan: STATE.user.jurusan,
-        jawaban_text: $('uj-jawaban').value
+        jawaban_text: $('uj-jawaban').value,
+        jawaban_foto: fotoUrl
       };
 
       const res = await api('submitJawaban', data);
       if(res.success) {
         clearInterval(STATE.timer);
         Navigate('selesai');
+        LoadSiswaHome(); // Refresh history
       } else {
         Toast(res.message, 'error');
       }
     }
 
-    // ================= INIT =================
     function toggleSidebar() {
       $('sidebar').classList.toggle('-translate-x-full');
     }
