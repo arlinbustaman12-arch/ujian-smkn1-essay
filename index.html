@@ -7,18 +7,11 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
-  
   <script>
     tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] },
-          colors: { brand: { light: '#e0f2fe', DEFAULT: '#0ea5e9', dark: '#0369a1' } }
-        }
-      }
+      theme: { extend: { fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] }, colors: { brand: { light: '#e0f2fe', DEFAULT: '#0ea5e9', dark: '#0369a1' } } } }
     }
   </script>
-
   <style>
     body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f1f5f9; color: #1e293b; }
     .bg-pattern { background-color: #f1f5f9; background-image: radial-gradient(#cbd5e1 1px, transparent 1px); background-size: 20px 20px; }
@@ -26,30 +19,29 @@
     .blob-1 { width: 600px; height: 600px; background: #bae6fd; top: -200px; left: -100px; }
     .blob-2 { width: 500px; height: 500px; background: #bbf7d0; bottom: -100px; right: -100px; animation-delay: -5s; }
     @keyframes float { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(20px, 20px); } }
-
     .page { display: none; opacity: 0; transition: opacity 0.3s ease; }
     .page.active { display: block; opacity: 1; }
     .page.active.is-flex { display: flex; }
-
     .card { background: white; border-radius: 1rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border: 1px solid #e2e8f0; }
-    .card-hover:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08); }
-
     .btn-brand { background: linear-gradient(135deg, #0ea5e9 0%, #14b8a6 100%); transition: all 0.2s; color: white; font-weight: 600; }
     .btn-brand:hover { filter: brightness(1.1); box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3); }
-    
     .input-field { background: #f8fafc; border: 1px solid #e2e8f0; transition: all 0.2s; }
     .input-field:focus { background: white; border-color: #0ea5e9; box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1); outline: none; }
-
     .sidebar-dark { background: #1e293b; color: white; }
     .sidebar-dark .nav-item:hover { background: rgba(255,255,255,0.1); }
     .sidebar-dark .nav-item.active { background: rgba(255,255,255,0.1); border-left: 4px solid #0ea5e9; }
-
     .loading-overlay { position: fixed; inset: 0; background: rgba(255,255,255,0.9); display: flex; align-items: center; justify-content: center; z-index: 999; display: none; }
     .spinner { width: 40px; height: 40px; border: 4px solid #e2e8f0; border-top-color: #0ea5e9; border-radius: 50%; animation: spin 0.8s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
-    
     .file-input-label { cursor: pointer; transition: all 0.2s; }
     .file-input-label:hover { background: #f1f5f9; }
+    
+    /* Print Styles */
+    @media print {
+      body * { visibility: hidden; }
+      #print-area, #print-area * { visibility: visible; }
+      #print-area { position: absolute; left: 0; top: 0; width: 100%; }
+    }
   </style>
 </head>
 <body class="bg-pattern overflow-x-hidden">
@@ -59,7 +51,7 @@
   <div id="loading-overlay"><div class="spinner"></div></div>
   <div id="toast" class="fixed top-5 right-5 z-50 hidden"></div>
 
-  <!-- ================= LOGIN PAGE ================= -->
+  <!-- LOGIN PAGE -->
   <div id="page-login" class="page active is-flex min-h-screen items-center justify-center p-4 relative z-10">
     <div class="w-full max-w-md">
       <div class="text-center mb-8">
@@ -67,51 +59,38 @@
         <h1 class="text-3xl font-extrabold text-slate-800">Ujian Esai</h1>
         <p class="text-slate-500 mt-1">SMKN 1 Dako Pemean</p>
       </div>
-      
       <div class="card p-8">
         <div class="flex mb-6 bg-slate-100 p-1 rounded-lg">
           <button onclick="switchTab('guru')" id="btn-tab-guru" class="flex-1 py-2 rounded-md text-sm font-semibold transition bg-white text-slate-700 shadow-sm">Guru</button>
           <button onclick="switchTab('siswa')" id="btn-tab-siswa" class="flex-1 py-2 rounded-md text-sm font-semibold transition text-slate-400">Siswa</button>
         </div>
-
         <form id="form-guru" onsubmit="LoginGuru(event)" class="space-y-4">
-          <div>
-            <label class="text-sm text-slate-600 font-medium">Email</label>
-            <input type="email" id="guru-email" required class="input-field w-full mt-1 px-4 py-2.5 rounded-lg" placeholder="email@sekolah.id">
-          </div>
-          <div>
-            <label class="text-sm text-slate-600 font-medium">Password</label>
-            <input type="password" id="guru-pass" required class="input-field w-full mt-1 px-4 py-2.5 rounded-lg" placeholder="Password">
-          </div>
-          <button type="submit" class="btn-brand w-full py-2.5 rounded-lg">Masuk Guru</button>
+          <input type="email" id="guru-email" required class="input-field w-full mt-1 px-4 py-2.5 rounded-lg" placeholder="Email">
+          <input type="password" id="guru-pass" required class="input-field w-full mt-1 px-4 py-2.5 rounded-lg" placeholder="Password">
+          <button type="submit" class="btn-brand w-full py-2.5 rounded-lg">Masuk</button>
         </form>
-
         <form id="form-siswa" onsubmit="LoginSiswa(event)" class="space-y-4 hidden">
-          <div>
-            <label class="text-sm text-slate-600 font-medium">NISN / ID Siswa</label>
-            <input type="text" id="siswa-nisn" required class="input-field w-full mt-1 px-4 py-2.5 rounded-lg text-center text-xl tracking-widest font-mono" placeholder="XXXXXXXX" maxlength="20">
-            <p class="text-xs text-center text-slate-400 mt-2">Masukkan NISN untuk melihat nilai atau ujian</p>
-          </div>
-          <button type="submit" class="btn-brand w-full py-2.5 rounded-lg">Masuk Siswa</button>
+          <input type="text" id="siswa-nisn" required class="input-field w-full mt-1 px-4 py-2.5 rounded-lg text-center text-xl tracking-widest font-mono" placeholder="NISN">
+          <button type="submit" class="btn-brand w-full py-2.5 rounded-lg">Masuk</button>
         </form>
       </div>
     </div>
   </div>
 
-  <!-- ================= DASHBOARD GURU ================= -->
+  <!-- DASHBOARD GURU -->
   <div id="page-guru" class="page min-h-screen relative z-10">
     <div class="flex">
       <aside id="sidebar" class="fixed left-0 top-0 h-full w-64 sidebar-dark transform -translate-x-full lg:translate-x-0 transition-transform z-40">
         <div class="p-6 border-b border-slate-700">
-          <h2 class="font-bold text-lg">Dashboard</h2>
+          <h2 class="font-bold text-lg">Guru</h2>
           <p class="text-xs text-slate-400 mt-1" id="guru-name">-</p>
         </div>
         <nav class="p-4 space-y-1">
           <button onclick="PageGuru('home')" class="nav-item w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium">Beranda</button>
-          <button onclick="PageGuru('soal')" class="nav-item w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium">Buat Soal</button>
-          <button onclick="PageGuru('bank')" class="nav-item w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium">Bank Soal</button>
-          <button onclick="PageGuru('token')" class="nav-item w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium">Rilis Token</button>
+          <button onclick="PageGuru('buat')" class="nav-item w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium">Buat Ujian</button>
+          <button onclick="PageGuru('bank')" class="nav-item w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium">Bank Ujian</button>
           <button onclick="PageGuru('nilai')" class="nav-item w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium">Penilaian</button>
+          <button onclick="PageGuru('rekap')" class="nav-item w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium">Rekap Nilai</button>
         </nav>
         <button onclick="Logout()" class="absolute bottom-6 left-6 right-6 py-2 text-red-400 text-sm hover:bg-red-500/10 rounded-lg border border-red-500/20">Keluar</button>
       </aside>
@@ -121,74 +100,129 @@
           <svg class="w-6 h-6 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
         </button>
 
+        <!-- HOME -->
         <section id="guru-home">
           <div class="bg-gradient-to-r from-sky-600 to-teal-500 rounded-2xl p-6 mb-6 text-white shadow-lg">
             <h1 class="text-2xl font-bold">Selamat Datang</h1>
-            <p class="opacity-90 text-sm mt-1">Kelola ujian esai dengan mudah dan cepat.</p>
+            <p class="opacity-90 text-sm mt-1">Kelola ujian esai dengan mudah.</p>
           </div>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div class="card p-6 card-hover"><p class="text-3xl font-bold text-sky-600" id="stat-total">0</p><p class="text-sm text-slate-500 mt-1">Total Soal</p></div>
+            <div class="card p-6 card-hover"><p class="text-3xl font-bold text-sky-600" id="stat-total">0</p><p class="text-sm text-slate-500 mt-1">Total Ujian</p></div>
             <div class="card p-6 card-hover"><p class="text-3xl font-bold text-teal-500" id="stat-aktif">0</p><p class="text-sm text-slate-500 mt-1">Ujian Aktif</p></div>
             <div class="card p-6 card-hover"><p class="text-3xl font-bold text-amber-500" id="stat-pending">0</p><p class="text-sm text-slate-500 mt-1">Perlu Dinilai</p></div>
           </div>
         </section>
 
-        <section id="guru-soal" class="hidden">
-          <h2 class="text-xl font-bold mb-4 text-slate-800">Buat Soal Baru</h2>
-          <form onsubmit="BuatSoal(event)" class="card p-6 space-y-4">
-            <div class="grid grid-cols-3 gap-3">
-              <select id="add-mapel" required class="input-field rounded-lg p-2.5 text-sm"><option value="">Mapel</option><option>Matematika</option><option>B.Indonesia</option><option>Produktif</option></select>
-              <select id="add-kelas" required class="input-field rounded-lg p-2.5 text-sm"><option value="">Kelas</option><option>X</option><option>XI</option><option>XII</option></select>
-              <select id="add-jurusan" required class="input-field rounded-lg p-2.5 text-sm"><option value="">Jurusan</option><option>ATP</option><option>ATU</option><option>APPL</option><option>SEMUA</option></select>
+        <!-- BUAT UJIAN (MULTI STEP) -->
+        <section id="guru-buat" class="hidden">
+          <h2 class="text-xl font-bold mb-4 text-slate-800">Buat Ujian Baru</h2>
+          
+          <!-- Step 1: Info Umum -->
+          <div id="form-step-1" class="card p-6">
+            <h3 class="font-bold text-slate-700 mb-3">Langkah 1: Informasi Ujian</h3>
+            <div class="grid grid-cols-2 gap-3 mb-3">
+              <select id="add-mapel" class="input-field rounded-lg p-2.5"><option>Matematika</option><option>B.Indonesia</option><option>Produktif</option></select>
+              <input type="number" id="add-waktu" value="60" class="input-field rounded-lg p-2.5" placeholder="Waktu (Menit)">
             </div>
-            
-            <!-- Upload Gambar Soal -->
-            <div>
-              <label class="block text-sm font-medium text-slate-700 mb-1">Gambar Soal (Opsional)</label>
-              <div class="flex items-center gap-3">
-                 <label class="file-input-label flex items-center gap-2 px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-600 hover:text-sky-600">
-                   <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                   <span id="file-name-guru">Pilih File</span>
-                   <input type="file" id="file-guru" accept="image/*" class="hidden" onchange="handleFileSelect(this, 'preview-guru', 'file-name-guru')">
-                 </label>
-                 <img id="preview-guru" class="h-16 rounded shadow hidden">
-              </div>
+            <div class="grid grid-cols-2 gap-3 mb-3">
+              <select id="add-kelas" class="input-field rounded-lg p-2.5"><option>X</option><option>XI</option><option>XII</option></select>
+              <select id="add-jurusan" class="input-field rounded-lg p-2.5"><option>ATP</option><option>ATU</option><option>APPL</option><option>SEMUA</option></select>
             </div>
+            <div class="mb-3">
+              <label class="text-sm text-slate-600">Jumlah Soal</label>
+              <input type="number" id="add-jumlah" min="1" value="1" class="input-field w-full rounded-lg p-2.5" placeholder="Jumlah Soal">
+            </div>
+            <button onclick="nextStepCreate()" class="btn-brand w-full py-2 rounded-lg">Lanjut Buat Soal</button>
+          </div>
 
-            <textarea id="add-text" rows="4" required class="input-field w-full rounded-lg p-3 text-sm" placeholder="Tulis soal esai di sini..."></textarea>
-            <div class="grid grid-cols-2 gap-3">
-               <input type="number" id="add-waktu" value="60" class="input-field rounded-lg p-2.5 text-sm" placeholder="Waktu (Menit)">
-               <button class="btn-brand py-2.5 rounded-lg text-sm">Simpan Soal</button>
+          <!-- Step 2: Detail Soal -->
+          <div id="form-step-2" class="hidden card p-6 mt-4">
+            <div class="flex justify-between items-center mb-3">
+              <h3 class="font-bold text-slate-700">Langkah 2: Input Soal</h3>
+              <span id="step-info" class="text-sm text-slate-500">Soal 1 dari 1</span>
             </div>
-          </form>
+            <div id="question-container">
+              <!-- Dynamic Questions Here -->
+            </div>
+            <div class="flex gap-2 mt-4">
+              <button id="prev-q-btn" onclick="prevQuestion()" class="py-2 px-4 bg-slate-200 text-slate-700 rounded-lg hidden">Sebelumnya</button>
+              <button id="next-q-btn" onclick="nextQuestion()" class="btn-brand flex-1 py-2 rounded-lg">Soal Berikutnya</button>
+            </div>
+            <button id="save-exam-btn" onclick="saveAllExam()" class="hidden w-full mt-2 py-2 bg-teal-500 text-white rounded-lg font-bold">Simpan Ujian</button>
+          </div>
         </section>
 
+        <!-- BANK UJIAN -->
         <section id="guru-bank" class="hidden">
-          <h2 class="text-xl font-bold mb-4 text-slate-800">Bank Soal</h2>
-          <div id="list-soal" class="space-y-3"></div>
+          <h2 class="text-xl font-bold mb-4 text-slate-800">Bank Ujian</h2>
+          <div id="list-exams" class="space-y-3"></div>
         </section>
 
-        <section id="guru-token" class="hidden">
-          <h2 class="text-xl font-bold mb-4 text-slate-800">Rilis Token</h2>
-          <div class="card p-6">
-            <select id="select-soal" class="input-field w-full rounded-lg p-2.5 mb-3 text-sm"></select>
-            <button onclick="RilisToken()" class="btn-brand w-full py-2.5 rounded-lg text-sm">Generate Token</button>
-            <div id="hasil-token" class="hidden mt-4 text-center bg-sky-50 p-4 rounded-xl border border-sky-100">
-               <p class="text-xs text-sky-600 mb-1">Token Ujian:</p>
-               <h1 id="txt-token" class="text-4xl font-mono font-bold text-sky-700 tracking-widest"></h1>
+        <!-- PENILAIAN -->
+        <section id="guru-nilai" class="hidden">
+          <h2 class="text-xl font-bold mb-4 text-slate-800">Penilaian Jawaban</h2>
+          
+          <!-- Filter -->
+          <div class="card p-4 mb-4 flex flex-wrap gap-2 items-end">
+            <div>
+              <label class="text-xs text-slate-500">Kelas</label>
+              <select id="filter-kelas" onchange="loadGradingList()" class="input-field p-2 rounded text-sm"><option value="">Semua</option><option>X</option><option>XI</option><option>XII</option></select>
+            </div>
+            <div>
+              <label class="text-xs text-slate-500">Jurusan</label>
+              <select id="filter-jurusan" onchange="loadGradingList()" class="input-field p-2 rounded text-sm"><option value="">Semua</option><option>ATP</option><option>ATU</option><option>APPL</option></select>
+            </div>
+          </div>
+
+          <div id="list-grading" class="space-y-3"></div>
+          
+          <!-- Modal Penilaian Detail -->
+          <div id="modal-grade" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+            <div class="bg-white rounded-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6 relative">
+              <button onclick="closeModal()" class="absolute top-2 right-2 text-slate-400 hover:text-red-500">Tutup</button>
+              <h3 class="font-bold text-lg mb-4">Penilaian: <span id="modal-nama"></span></h3>
+              <div id="detail-jawaban" class="space-y-4"></div>
             </div>
           </div>
         </section>
 
-        <section id="guru-nilai" class="hidden">
-          <h2 class="text-xl font-bold mb-4 text-slate-800">Penilaian Jawaban</h2>
-          <div id="list-jawaban" class="space-y-4"></div>
+        <!-- REKAP NILAI -->
+        <section id="guru-rekap" class="hidden">
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-bold text-slate-800">Rekap Nilai</h2>
+            <button onclick="printRecap()" class="btn-brand px-4 py-2 text-sm rounded-lg flex items-center gap-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+              Cetak
+            </button>
+          </div>
+          
+          <div class="card p-4 mb-4 flex gap-2">
+             <select id="rekap-kelas" onchange="loadRecap()" class="input-field p-2 rounded text-sm"><option value="">Semua Kelas</option><option>X</option><option>XI</option><option>XII</option></select>
+             <select id="rekap-jurusan" onchange="loadRecap()" class="input-field p-2 rounded text-sm"><option value="">Semua Jurusan</option><option>ATP</option><option>ATU</option><option>APPL</option></select>
+          </div>
+
+          <div id="print-area" class="card overflow-x-auto">
+            <table class="w-full text-sm" id="table-rekap">
+              <thead class="bg-slate-50 border-b">
+                <tr>
+                  <th class="p-3 text-left">No</th>
+                  <th class="p-3 text-left">Nama</th>
+                  <th class="p-3 text-left">Kelas</th>
+                  <th class="p-3 text-left">Jurusan</th>
+                  <th class="p-3 text-left">Mapel & Nilai</th>
+                  <th class="p-3 text-left">Total</th>
+                </tr>
+              </thead>
+              <tbody id="body-rekap"></tbody>
+            </table>
+          </div>
         </section>
+
       </main>
     </div>
   </div>
 
-  <!-- ================= DASHBOARD SISWA ================= -->
+  <!-- DASHBOARD SISWA -->
   <div id="page-siswa" class="page min-h-screen relative z-10 p-4">
     <div class="max-w-2xl mx-auto py-10">
       <div class="card rounded-xl p-4 mb-6 flex justify-between items-center">
@@ -212,7 +246,7 @@
     </div>
   </div>
 
-  <!-- ================= HALAMAN UJIAN ================= -->
+  <!-- HALAMAN UJIAN SISWA -->
   <div id="page-ujian" class="page min-h-screen relative z-10 p-4">
     <div class="max-w-3xl mx-auto py-10">
       <div class="flex justify-between items-center mb-4 text-sm text-slate-500 border-b pb-2">
@@ -220,380 +254,352 @@
         <span id="uj-time" class="font-mono font-bold text-slate-700 bg-slate-100 px-2 py-1 rounded">60:00</span>
       </div>
       
-      <div class="card p-6 mb-6">
-        <h2 class="font-bold text-lg mb-2 text-slate-800">Soal</h2>
-        <div id="uj-soal" class="text-slate-600 leading-relaxed border-l-4 border-sky-500 pl-4 mb-4"></div>
-        <img id="uj-soal-img" class="max-w-full rounded-lg hidden">
+      <div id="ujian-container" class="space-y-6">
+        <!-- Dynamic Questions -->
       </div>
 
-      <div class="card p-6">
-        <h2 class="font-bold mb-2 text-slate-800">Jawaban</h2>
-        <textarea id="uj-jawaban" rows="6" class="input-field w-full rounded-lg p-3 text-sm" placeholder="Ketik jawaban..."></textarea>
-        
-        <!-- Upload Gambar Jawaban -->
-        <div class="mt-3">
-          <label class="block text-sm font-medium text-slate-700 mb-1">Foto Jawaban (Opsional)</label>
-          <div class="flex items-center gap-3">
-             <label class="file-input-label flex items-center gap-2 px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-600 hover:text-sky-600 cursor-pointer">
-               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-               <span id="file-name-siswa">Ambil Foto</span>
-               <input type="file" id="file-siswa" accept="image/*" class="hidden" onchange="handleFileSelect(this, 'preview-siswa', 'file-name-siswa')">
-             </label>
-             <img id="preview-siswa" class="h-16 rounded shadow hidden">
-          </div>
-        </div>
-
-        <button onclick="SubmitUjian()" class="btn-brand w-full mt-4 py-3 rounded-lg">Submit Jawaban</button>
-      </div>
+      <button onclick="SubmitUjian()" class="btn-brand w-full mt-6 py-3 rounded-lg">Submit Semua Jawaban</button>
     </div>
   </div>
 
-  <!-- ================= SELESAI ================= -->
+  <!-- SELESAI -->
   <div id="page-selesai" class="page is-flex min-h-screen items-center justify-center p-4 relative z-10">
      <div class="text-center card rounded-xl p-10 max-w-sm">
         <div class="w-16 h-16 bg-teal-500 rounded-full flex items-center justify-center mx-auto mb-4 text-white shadow-lg">
            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
         </div>
         <h2 class="text-xl font-bold text-slate-800 mb-2">Jawaban Terkirim</h2>
-        <p class="text-slate-500 text-sm mb-6">Silakan tunggu guru untuk penilaian.</p>
         <button onclick="Navigate('siswa')" class="btn-brand px-6 py-2 rounded-lg">Kembali</button>
      </div>
   </div>
 
-  <script>
-    // ================= KONFIGURASI =================
-    const API_URL = 'https://script.google.com/macros/s/AKfycbxvZ409y2xluA81tzzIGVHaH3A9Rwymmpfc9yvLclI0_QmexcLYm1lx0l0l7hPUYyFMYA/exec'; // GANTI INI !!!
-    
+<script>
+    const API_URL = 'https://script.google.com/macros/s/AKfycbyaKW8r08eb3HC_xaIxSsKJTZ7RupuVQ_aEOvWS4Rk3xomIEWwe8hCbww4ZacaqRx7HEQ/exec'; 
     const $ = id => document.getElementById(id);
-    const STATE = { user: null, soal: [], current: null, timer: null, time: 0 };
+    const STATE = { 
+      user: null, 
+      currentExam: null, 
+      questions: [], // Untuk menyimpan soal saat ujian
+      answers: {}, // Untuk menyimpan jawaban siswa {nomor: text}
+      questionCounter: 0, // Tracker saat buat soal guru
+      totalQuestions: 0
+    };
 
-    // ================= CORE FUNCTION =================
+    // --- CORE FUNCTIONS ---
     async function api(action, data={}) {
       $('loading-overlay').style.display = 'flex';
-      try {
-        const res = await fetch(`${API_URL}?action=${action}`, { method: 'POST', body: JSON.stringify(data) });
-        const json = await res.json();
-        return json;
-      } catch(e) {
-        return { success: false, message: 'Koneksi gagal.' };
-      } finally {
-        $('loading-overlay').style.display = 'none';
-      }
+      try { const res = await fetch(`${API_URL}?action=${action}`, { method: 'POST', body: JSON.stringify(data) }); return await res.json(); } 
+      catch(e) { return { success: false, message: 'Koneksi gagal' }; } 
+      finally { $('loading-overlay').style.display = 'none'; }
     }
+    function Navigate(page) { document.querySelectorAll('.page').forEach(p => p.classList.remove('active', 'is-flex')); const t = $(`page-${page}`); t.classList.add('active'); if(page === 'login' || page === 'selesai') t.classList.add('is-flex'); }
+    function Toast(msg, type='success') { const c = $('toast'); const bg = type === 'success' ? 'bg-teal-500' : 'bg-red-500'; c.innerHTML = `<div class="${bg} text-white px-6 py-3 rounded-xl shadow-lg">${msg}</div>`; c.classList.remove('hidden'); setTimeout(() => c.classList.add('hidden'), 3000); }
+    function SaveSession(d) { sessionStorage.setItem('ujian_user', JSON.stringify(d)); }
+    function LoadSession() { const d = sessionStorage.getItem('ujian_user'); if (d) { STATE.user = JSON.parse(d); return true; } return false; }
 
-    function Navigate(page) {
-      document.querySelectorAll('.page').forEach(p => p.classList.remove('active', 'is-flex'));
-      const target = $(`page-${page}`);
-      target.classList.add('active');
-      if(page === 'login' || page === 'selesai') target.classList.add('is-flex');
-    }
-
-    function Toast(msg, type='success') {
-      const c = $('toast');
-      const bg = type === 'success' ? 'bg-teal-500' : 'bg-red-500';
-      c.innerHTML = `<div class="${bg} text-white px-6 py-3 rounded-xl shadow-lg">${msg}</div>`;
-      c.classList.remove('hidden');
-      setTimeout(() => c.classList.add('hidden'), 3000);
-    }
-
-    // ================= SESSION HANDLING (PERBAIKAN: sessionStorage) =================
-    // Menggunakan sessionStorage agar otomatis logout jika tab browser ditutup
-    function SaveSession(data) {
-      sessionStorage.setItem('ujian_user', JSON.stringify(data));
-    }
-
-    function LoadSession() {
-      const data = sessionStorage.getItem('ujian_user');
-      if (data) {
-        STATE.user = JSON.parse(data);
-        return true;
-      }
-      return false;
-    }
-
-    // Run on start
-    if (LoadSession()) {
-      if (STATE.user.role === 'guru') {
-        $('guru-name').innerText = STATE.user.nama;
-        LoadGuruHome();
-        Navigate('guru');
-      } else {
-        $('siswa-nama').innerText = STATE.user.nama;
-        $('siswa-info').innerText = `Kelas ${STATE.user.kelas} - ${STATE.user.jurusan}`;
-        LoadSiswaHome();
-        Navigate('siswa');
-      }
-    }
-
-    // ================= AUTH =================
-    function switchTab(t) {
-      $('form-guru').classList.toggle('hidden', t !== 'guru');
-      $('form-siswa').classList.toggle('hidden', t !== 'siswa');
-      $('btn-tab-guru').classList.toggle('bg-white', t === 'guru');
-      $('btn-tab-guru').classList.toggle('text-slate-700', t === 'guru');
-      $('btn-tab-guru').classList.toggle('text-slate-400', t !== 'guru');
-      
-      $('btn-tab-siswa').classList.toggle('bg-white', t === 'siswa');
-      $('btn-tab-siswa').classList.toggle('text-slate-700', t === 'siswa');
-      $('btn-tab-siswa').classList.toggle('text-slate-400', t !== 'siswa');
-    }
-
-    async function LoginGuru(e) {
-      e.preventDefault();
-      const res = await api('loginGuru', { email: $('guru-email').value, password: $('guru-pass').value });
-      if(res.success) {
-        STATE.user = { ...res.data, role: 'guru' };
-        SaveSession(STATE.user);
-        $('guru-name').innerText = res.data.nama;
-        LoadGuruHome();
-        Navigate('guru');
-        Toast('Login Berhasil');
-      } else Toast(res.message, 'error');
-    }
-
-    async function LoginSiswa(e) {
-      e.preventDefault();
-      const res = await api('loginSiswa', { id: $('siswa-nisn').value });
-      if(res.success) {
-        STATE.user = { ...res.data, role: 'siswa' };
-        SaveSession(STATE.user);
-        $('siswa-nama').innerText = res.data.nama;
-        $('siswa-info').innerText = `Kelas ${res.data.kelas} - ${res.data.jurusan}`;
-        LoadSiswaHome();
-        Navigate('siswa');
-        Toast('Login Berhasil');
-      } else Toast(res.message, 'error');
-    }
-
-    function Logout() {
-      STATE.user = null;
-      sessionStorage.removeItem('ujian_user'); // Hapus session
-      clearInterval(STATE.timer);
-      Navigate('login');
-    }
-
-    // ================= FILE HANDLING (UPLOAD) =================
-    async function handleFileSelect(input, previewId, nameId) {
-      const file = input.files[0];
-      if (!file) return;
-
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        $(previewId).src = e.target.result;
-        $(previewId).classList.remove('hidden');
-      };
-      reader.readAsDataURL(file);
-      
-      $(nameId).innerText = file.name.length > 15 ? file.name.substring(0,15)+'...' : file.name;
-    }
-
-    async function processUpload(fileInput) {
-      if (!fileInput.files[0]) return null;
-      
-      const file = fileInput.files[0];
-      const reader = new FileReader();
-      
-      return new Promise((resolve, reject) => {
-        reader.onload = async function(e) {
-          const base64 = e.target.result;
-          const fileName = 'img_' + new Date().getTime() + '.' + file.name.split('.').pop();
-          
-          const res = await api('uploadImage', { base64: base64, fileName: fileName });
-          if (res.success) {
-            resolve(res.url);
-          } else {
-            reject(res.message);
-          }
-        };
-        reader.readAsDataURL(file);
-      });
-    }
+    // --- STARTUP ---
+    if (LoadSession()) { if (STATE.user.role === 'guru') { $('guru-name').innerText = STATE.user.nama; LoadGuruHome(); Navigate('guru'); } else { $('siswa-nama').innerText = STATE.user.nama; $('siswa-info').innerText = `Kelas ${STATE.user.kelas} - ${STATE.user.jurusan}`; Navigate('siswa'); } }
+    function switchTab(t) { $('form-guru').classList.toggle('hidden', t !== 'guru'); $('form-siswa').classList.toggle('hidden', t !== 'siswa'); $('btn-tab-guru').classList.toggle('bg-white', t === 'guru'); $('btn-tab-siswa').classList.toggle('bg-white', t === 'siswa'); }
+    async function LoginGuru(e) { e.preventDefault(); const res = await api('loginGuru', { email: $('guru-email').value, password: $('guru-pass').value }); if(res.success) { STATE.user = { ...res.data, role: 'guru' }; SaveSession(STATE.user); $('guru-name').innerText = res.data.nama; LoadGuruHome(); Navigate('guru'); } else Toast(res.message, 'error'); }
+    async function LoginSiswa(e) { e.preventDefault(); const res = await api('loginSiswa', { id: $('siswa-nisn').value }); if(res.success) { STATE.user = { ...res.data, role: 'siswa' }; SaveSession(STATE.user); $('siswa-nama').innerText = res.data.nama; $('siswa-info').innerText = `Kelas ${res.data.kelas} - ${STATE.user.jurusan}`; Navigate('siswa'); } else Toast(res.message, 'error'); }
+    function Logout() { STATE.user = null; sessionStorage.removeItem('ujian_user'); clearInterval(STATE.timer); Navigate('login'); }
 
     // ================= GURU LOGIC =================
+    
+    // Home
     async function LoadGuruHome() {
-      const [soalRes, jawabanRes] = await Promise.all([
-        api('getSoal', { guru_id: STATE.user.id }),
-        api('getJawaban', { guru_id: STATE.user.id }) // FILTER: Hanya ambil jawaban milik guru ini
-      ]);
-      
-      STATE.soal = soalRes.success ? soalRes.data : [];
-      const jawaban = jawabanRes.success ? jawabanRes.data : [];
-
-      $('stat-total').innerText = STATE.soal.length;
-      $('stat-aktif').innerText = STATE.soal.filter(s => s.status === 'released').length;
-      $('stat-pending').innerText = jawaban.filter(j => !j.nilai).length;
+      const exams = await api('getExams', { guru_id: STATE.user.id });
+      const grading = await api('getGradingList', { guru_id: STATE.user.id });
+      if(exams.success) { $('stat-total').innerText = exams.data.length; $('stat-aktif').innerText = exams.data.filter(e => e.status === 'released').length; }
+      if(grading.success) $('stat-pending').innerText = grading.data.filter(s => s.graded < s.answered).length;
     }
 
     function PageGuru(page) {
-      ['home', 'soal', 'bank', 'token', 'nilai'].forEach(p => $(`guru-${p}`).classList.add('hidden'));
+      ['home', 'buat', 'bank', 'nilai', 'rekap'].forEach(p => $(`guru-${p}`).classList.add('hidden'));
       $(`guru-${page}`).classList.remove('hidden');
-      
-      if(page === 'bank') RenderBankSoal();
-      if(page === 'token') LoadTokenOptions();
-      if(page === 'nilai') LoadPenilaian();
+      if(page === 'bank') loadExams();
+      if(page === 'nilai') loadGradingList();
+      if(page === 'rekap') loadRecap();
     }
 
-    async function BuatSoal(e) {
-      e.preventDefault();
-      Toast('Menyimpan soal...', 'success');
+    // --- BUAT UJIAN (MULTI STEP) ---
+    let tempQuestions = []; // Penampungan soal sementara
+
+    function nextStepCreate() {
+      const jumlah = parseInt($('add-jumlah').value);
+      if(!jumlah || jumlah < 1) return Toast("Jumlah soal tidak valid", "error");
       
-      let imageUrl = '';
-      if ($('file-guru').files[0]) {
-        try {
-          imageUrl = await processUpload($('file-guru'));
-        } catch (err) {
-          Toast('Gagal upload gambar: ' + err, 'error');
-          return;
-        }
+      STATE.totalQuestions = jumlah;
+      STATE.questionCounter = 0;
+      tempQuestions = [];
+      
+      // Init array kosong
+      for(let i=0; i<jumlah; i++) tempQuestions.push({ nomor: i+1, text: '', image: '' });
+      
+      $('form-step-1').classList.add('hidden');
+      $('form-step-2').classList.remove('hidden');
+      renderQuestionForm();
+    }
+
+    function renderQuestionForm() {
+      const q = tempQuestions[STATE.questionCounter];
+      $('step-info').innerText = `Soal ${q.nomor} dari ${STATE.totalQuestions}`;
+      // Render Form
+      const container = $('question-container');
+      container.innerHTML = `
+        <textarea id="q-text" rows="4" class="input-field w-full rounded-lg p-3 mb-2" placeholder="Tulis soal nomor ${q.nomor}...">${q.text}</textarea>
+        <label class="file-input-label flex items-center gap-2 p-2 bg-slate-50 border rounded mb-2 text-sm text-slate-600">
+           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+           <span>${q.image ? 'Gambar Terupload' : 'Upload Gambar (Opsional)'}</span>
+           <input type="file" id="q-file" accept="image/*" class="hidden" onchange="handleTempUpload(this)">
+        </label>
+      `;
+      
+      // Button Logic
+      if(STATE.questionCounter > 0) $('prev-q-btn').classList.remove('hidden'); else $('prev-q-btn').classList.add('hidden');
+      
+      if(STATE.questionCounter === STATE.totalQuestions - 1) {
+        $('next-q-btn').classList.add('hidden');
+        $('save-exam-btn').classList.remove('hidden');
+      } else {
+        $('next-q-btn').classList.remove('hidden');
+        $('save-exam-btn').classList.add('hidden');
+      }
+    }
+
+    async function handleTempUpload(input) {
+      // Save immediately to temp? or just file handle. For simplicity just mark it.
+      const file = input.files[0];
+      if(file) {
+         // We will upload only when saving all to save quota
+         Toast("File siap disimpan", "success");
+         input.previousElementSibling.innerText = file.name;
+      }
+    }
+
+    function saveCurrentQuestion() {
+      const q = tempQuestions[STATE.questionCounter];
+      q.text = $('q-text').value;
+      const fileInput = $('q-file');
+      if(fileInput.files[0]) {
+         q.file = fileInput.files[0]; // Store file object temporarily (only works if we process immediately)
+         // Note: We cannot store file object in array easily across navigation without complex logic.
+         // For now, we force upload now.
+      }
+    }
+
+    async function nextQuestion() {
+      saveCurrentQuestion();
+      const fileInput = $('q-file');
+      if(fileInput.files[0]) {
+         tempQuestions[STATE.questionCounter].image = await processUpload(fileInput);
+      }
+      
+      if(STATE.questionCounter < STATE.totalQuestions - 1) {
+        STATE.questionCounter++;
+        renderQuestionForm();
+      }
+    }
+
+    function prevQuestion() {
+      saveCurrentQuestion();
+      if(STATE.questionCounter > 0) {
+        STATE.questionCounter--;
+        renderQuestionForm();
+      }
+    }
+
+    async function saveAllExam() {
+      saveCurrentQuestion();
+      const fileInput = $('q-file');
+      if(fileInput.files[0]) {
+         tempQuestions[STATE.questionCounter].image = await processUpload(fileInput);
       }
 
-      const data = {
+      // 1. Create Header
+      const headerRes = await api('createExam', {
         guru_id: STATE.user.id,
         mapel: $('add-mapel').value,
         kelas: $('add-kelas').value,
         jurusan: $('add-jurusan').value,
-        soal_text: $('add-text').value,
-        soal_image: imageUrl,
         waktu: $('add-waktu').value
-      };
+      });
 
-      const res = await api('createSoal', data);
-      if(res.success) {
-        Toast('Soal disimpan');
-        $('add-text').value = '';
-        $('preview-guru').classList.add('hidden');
-        $('file-name-guru').innerText = 'Pilih File';
-        $('file-guru').value = '';
-        
+      if(!headerRes.success) return Toast("Gagal membuat ujian", "error");
+
+      // 2. Save Questions
+      // Filter out file objects, keep text & image url
+      const questionsToSave = tempQuestions.map(q => ({
+        nomor: q.nomor, text: q.text, image: q.image || ''
+      }));
+
+      const saveRes = await api('saveQuestions', { exam_id: headerRes.data.id, questions: questionsToSave });
+      
+      if(saveRes.success) {
+        Toast("Ujian berhasil disimpan");
+        $('form-step-1').classList.remove('hidden');
+        $('form-step-2').classList.add('hidden');
         LoadGuruHome();
         PageGuru('bank');
-      } else Toast(res.message, 'error');
-    }
-
-    function RenderBankSoal() {
-      const list = $('list-soal');
-      list.innerHTML = STATE.soal.map(s => `
-        <div class="card rounded-lg p-4 flex justify-between items-center card-hover">
-          <div>
-            <span class="text-xs px-2 py-1 rounded font-medium ${s.status === 'released' ? 'bg-green-100 text-green-700' : 'bg-slate-100 text-slate-500'}">${s.status === 'released' ? s.token : 'Draft'}</span>
-            <p class="font-medium mt-1 text-slate-800">${s.mapel} (${s.kelas} - ${s.jurusan})</p>
-            <p class="text-sm text-slate-500 truncate max-w-md">${s.soal_text}</p>
-            ${s.soal_image ? '<span class="text-xs text-sky-500">+ Ada Gambar</span>' : ''}
-          </div>
-          <button onclick="HapusSoal('${s.id}')" class="text-red-400 hover:bg-red-50 p-2 rounded text-xs font-medium">Hapus</button>
-        </div>
-      `).join('');
-    }
-
-    async function HapusSoal(id) {
-      if(!confirm('Hapus soal ini?')) return;
-      await api('deleteSoal', { id });
-      LoadGuruHome();
-      RenderBankSoal();
-      Toast('Soal dihapus');
-    }
-
-    function LoadTokenOptions() {
-      const drafts = STATE.soal.filter(s => s.status === 'draft');
-      $('select-soal').innerHTML = '<option value="">-- Pilih Soal Draft --</option>' + 
-        drafts.map(s => `<option value="${s.id}">${s.mapel} - ${s.kelas} (${s.jurusan})</option>`).join('');
-      $('hasil-token').classList.add('hidden');
-    }
-
-    async function RilisToken() {
-      const id = $('select-soal').value;
-      if(!id) return Toast('Pilih soal terlebih dahulu', 'error');
-      const res = await api('releaseToken', { soal_id: id });
-      if(res.success) {
-        $('hasil-token').classList.remove('hidden');
-        $('txt-token').innerText = res.data.token;
-        LoadGuruHome(); 
       }
     }
 
-    async function LoadPenilaian() {
-      // FILTER: Kirim guru_id
-      const res = await api('getJawaban', { guru_id: STATE.user.id });
-      const list = $('list-jawaban');
-      const data = res.success ? res.data : [];
-      const pending = data.filter(j => !j.nilai);
-
-      if(pending.length === 0) return list.innerHTML = '<p class="text-center text-slate-400 p-6">Tidak ada jawaban yang perlu dinilai.</p>';
-
-      list.innerHTML = pending.map(j => `
-        <div class="card rounded-xl p-5">
-          <div class="flex justify-between mb-2">
-            <h3 class="font-bold text-slate-800">${j.nama_siswa}</h3>
-            <span class="text-xs bg-slate-100 text-slate-600 px-2 py-1 rounded">${j.kelas} ${j.jurusan}</span>
+    // --- BANK UJIAN ---
+    async function loadExams() {
+      const res = await api('getExams', { guru_id: STATE.user.id });
+      const list = $('list-exams');
+      if(!res.success) return;
+      list.innerHTML = res.data.map(e => `
+        <div class="card p-4 flex justify-between items-center">
+          <div>
+            <p class="font-bold">${e.mapel} <span class="text-xs text-slate-400">(Kelas ${e.kelas})</span></p>
+            <p class="text-sm text-slate-500">Jurusan: ${e.jurusan} | Waktu: ${e.waktu} menit</p>
+            <span class="text-xs px-2 py-1 rounded ${e.status === 'released' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'}">${e.status === 'released' ? 'Token: ' + e.token : 'Draft'}</span>
           </div>
-          <p class="text-sm text-slate-600 bg-slate-50 p-3 rounded mb-3 border">${j.jawaban_text || '<i>Tidak ada jawaban teks</i>'}</p>
-          ${j.jawaban_foto ? `<a href="${j.jawaban_foto}" target="_blank" class="text-xs text-sky-500 underline block mb-3">Lihat Foto Jawaban</a>` : ''}
           <div class="flex gap-2">
-            <input type="number" id="n-${j.id}" placeholder="Nilai" class="input-field rounded p-2 w-24 text-sm">
-            <button onclick="SimpanNilai('${j.id}')" class="btn-brand px-4 rounded text-sm">Simpan</button>
+             ${e.status === 'draft' ? `<button onclick=" rilisToken('${e.id}')" class="btn-brand text-xs px-3 py-1 rounded">Rilis</button>` : ''}
+             <button onclick="hapusExam('${e.id}')" class="text-red-500 text-xs px-2">Hapus</button>
           </div>
         </div>
       `).join('');
     }
 
-    async function SimpanNilai(id) {
-      const nilai = $(`n-${id}`).value;
-      if(!nilai) return;
-      await api('updateNilai', { id, nilai });
-      Toast('Nilai disimpan');
-      LoadPenilaian();
-      LoadGuruHome();
+    async function rilisToken(id) {
+      const res = await api('releaseToken', { exam_id: id });
+      if(res.success) {
+        Toast("Token: " + res.data.token);
+        loadExams();
+      }
     }
+    
+    async function hapusExam(id) {
+      if(confirm('Hapus ujian ini?')) {
+        await api('deleteExam', { id: id });
+        loadExams();
+        LoadGuruHome();
+      }
+    }
+
+    // --- PENILAIAN ---
+    async function loadGradingList() {
+      const res = await api('getGradingList', { 
+        guru_id: STATE.user.id, 
+        kelas: $('filter-kelas').value, 
+        jurusan: $('filter-jurusan').value 
+      });
+      const list = $('list-grading');
+      if(!res.success) return;
+      
+      list.innerHTML = res.data.map(s => `
+        <div class="card p-4 flex justify-between items-center">
+          <div>
+             <p class="font-bold">${s.nama}</p>
+             <p class="text-xs text-slate-500">${s.kelas} - ${s.jurusan} | Mapel: ${s.mapel}</p>
+             <p class="text-xs text-sky-600">Dijawab: ${s.answered} | Dinilai: ${s.graded}</p>
+          </div>
+          <button onclick="openGradeModal('${s.siswa_id}', '${s.exam_id}', '${s.nama}')" class="btn-brand text-xs px-3 py-1 rounded">Nilai</button>
+        </div>
+      `).join('');
+    }
+
+    async function openGradeModal(siswaId, examId, nama) {
+      $('modal-nama').innerText = nama;
+      $('modal-grade').classList.remove('hidden');
+      
+      // Fetch detail jawaban
+      const res = await api('getStudentAnswers', { siswa_id: siswaId, exam_id: examId });
+      const container = $('detail-jawaban');
+      if(!res.success) return container.innerHTML = "Gagal memuat data";
+
+      container.innerHTML = res.data.map(d => `
+        <div class="bg-slate-50 p-3 rounded mb-2 border">
+          <p class="font-bold text-sm mb-1">No. ${d.nomor}</p>
+          <p class="text-xs text-slate-500 mb-2 border-l-2 border-sky-500 pl-2">${d.soal_text || '-'}</p>
+          <div class="bg-white p-2 rounded text-sm mb-2">${d.jawaban_text || '<i>Tidak ada teks</i>'}</div>
+          ${d.jawaban_image ? `<a href="${d.jawaban_image}" target="_blank" class="text-xs text-sky-500 underline mb-2 block">Lihat Foto</a>` : ''}
+          <div class="flex items-center gap-2 mt-1">
+             <input type="number" id="n-${d.id}" value="${d.nilai || ''}" class="input-field p-2 w-20 text-sm rounded" placeholder="Nilai">
+             <button onclick="saveSingleNilai('${d.id}')" class="bg-teal-500 text-white px-3 py-1 text-xs rounded">Simpan</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    async function saveSingleNilai(id) {
+      const nilai = $(`n-${id}`).value;
+      await api('updateNilai', { id: id, nilai: nilai });
+      Toast("Nilai disimpan");
+    }
+
+    function closeModal() { $('modal-grade').classList.add('hidden'); }
+
+    // --- RECAP ---
+    async function loadRecap() {
+      const res = await api('getRecap', { 
+        guru_id: STATE.user.id, 
+        kelas: $('rekap-kelas').value, 
+        jurusan: $('rekap-jurusan').value 
+      });
+      
+      const tbody = $('body-rekap');
+      if(!res.success) return;
+      tbody.innerHTML = res.data.map((s, i) => {
+        let mapelList = Object.entries(s.nilaiMapel).map(([k, v]) => `${k}: ${v}`).join(', ');
+        let total = Object.values(s.nilaiMapel).reduce((a, b) => a + b, 0);
+        return `
+          <tr class="border-b hover:bg-slate-50">
+            <td class="p-3">${i+1}</td>
+            <td class="p-3 font-medium">${s.nama}</td>
+            <td class="p-3">${s.kelas}</td>
+            <td class="p-3">${s.jurusan}</td>
+            <td class="p-3 text-xs">${mapelList || '-'}</td>
+            <td class="p-3 font-bold">${total}</td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function printRecap() { window.print(); }
 
     // ================= SISWA LOGIC =================
-    async function LoadSiswaHome() {
-      const res = await api('getNilaiSiswa', { siswa_id: STATE.user.id });
-      const list = $('list-nilai');
-      const data = res.success ? res.data : [];
-      if(data.length === 0) return list.innerHTML = '<p class="text-center text-slate-400 p-4">Belum ada nilai.</p>';
-      list.innerHTML = data.map(n => `
-        <div class="flex justify-between items-center p-3 bg-slate-50 rounded-lg border hover:border-sky-200 transition">
-          <div>
-            <p class="font-medium text-slate-800">${n.mapel}</p>
-            <p class="text-xs text-slate-400">${n.tanggal}</p>
-          </div>
-          <span class="font-bold text-xl ${n.nilai ? 'text-sky-600' : 'text-slate-300'}">${n.nilai || '-'}</span>
-        </div>
-      `).join('');
-    }
-
     async function MulaiUjian(e) {
       e.preventDefault();
       const token = $('input-token').value.toUpperCase();
-      const res = await api('getSoalByToken', { token });
+      const res = await api('getExamByToken', { token: token });
+      
       if(res.success) {
-        STATE.current = res.data;
-        $('uj-mapel').innerText = res.data.mapel;
-        $('uj-soal').innerText = res.data.soal_text;
+        STATE.currentExam = res.data.exam;
+        STATE.questions = res.data.questions;
+        STATE.answers = {};
         
-        if(res.data.soal_image) {
-          $('uj-soal-img').src = res.data.soal_image;
-          $('uj-soal-img').classList.remove('hidden');
-        } else {
-          $('uj-soal-img').classList.add('hidden');
-        }
+        $('uj-mapel').innerText = res.data.exam.mapel;
+        
+        // Render Questions
+        const container = $('ujian-container');
+        container.innerHTML = STATE.questions.map(q => `
+          <div class="card p-6">
+            <div class="flex justify-between items-center mb-2">
+              <h3 class="font-bold text-sky-700">No. ${q.nomor}</h3>
+            </div>
+            <p class="mb-2 text-slate-800">${q.text}</p>
+            ${q.image ? `<img src="${q.image}" class="mb-4 max-h-60 rounded">` : ''}
+            <textarea id="ans-${q.nomor}" rows="4" class="input-field w-full rounded-lg p-2" placeholder="Jawaban No. ${q.nomor}"></textarea>
+            <label class="file-input-label flex items-center gap-2 p-2 bg-slate-50 border rounded mt-2 text-sm text-slate-600">
+               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+               <span>Foto Jawaban (Opsional)</span>
+               <input type="file" id="file-${q.nomor}" accept="image/*" class="hidden">
+            </label>
+          </div>
+        `).join('');
 
-        $('uj-jawaban').value = '';
-        $('preview-siswa').classList.add('hidden');
-        $('file-name-siswa').innerText = 'Ambil Foto';
-        $('file-siswa').value = '';
-        
-        STATE.time = (res.data.waktu || 60) * 60;
+        // Timer
+        STATE.time = (res.data.exam.waktu || 60) * 60;
         clearInterval(STATE.timer);
         STATE.timer = setInterval(() => {
           STATE.time--;
-          const m = Math.floor(STATE.time/60);
-          const s = STATE.time%60;
+          const m = Math.floor(STATE.time/60); const s = STATE.time%60;
           $('uj-time').innerText = `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
-          if(STATE.time <= 0) {
-            clearInterval(STATE.timer);
-            SubmitUjian();
-          }
+          if(STATE.time <= 0) { clearInterval(STATE.timer); SubmitUjian(); }
         }, 1000);
 
         Navigate('ujian');
@@ -601,43 +607,53 @@
     }
 
     async function SubmitUjian() {
-      if(!confirm('Yakin submit jawaban?')) return;
+      if(!confirm('Yakin submit semua jawaban?')) return;
       
-      Toast('Mengirim jawaban...', 'success');
-      
-      let fotoUrl = '';
-      if ($('file-siswa').files[0]) {
-        try {
-          fotoUrl = await processUpload($('file-siswa'));
-        } catch (err) {
-          Toast('Gagal upload foto jawaban', 'error');
-          return;
+      let answers = [];
+      for(let q of STATE.questions) {
+        let text = $(`ans-${q.nomor}`).value;
+        let image = '';
+        // Check if file exist
+        const fileInput = $(`file-${q.nomor}`);
+        if(fileInput.files[0]) {
+           image = await processUpload(fileInput);
         }
+        answers.push({ nomor: q.nomor, text: text, image: image });
       }
-      
-      const data = {
-        token: STATE.current.token,
+
+      const res = await api('submitAnswers', {
+        exam_id: STATE.currentExam.id,
         siswa_id: STATE.user.id,
         nama_siswa: STATE.user.nama,
         kelas: STATE.user.kelas,
         jurusan: STATE.user.jurusan,
-        jawaban_text: $('uj-jawaban').value,
-        jawaban_foto: fotoUrl
-      };
+        answers: answers
+      });
 
-      const res = await api('submitJawaban', data);
       if(res.success) {
         clearInterval(STATE.timer);
         Navigate('selesai');
-        LoadSiswaHome();
-      } else {
-        Toast(res.message, 'error');
-      }
+      } else Toast(res.message, 'error');
     }
 
-    function toggleSidebar() {
-      $('sidebar').classList.toggle('-translate-x-full');
+    // --- FILE UPLOAD HELPER ---
+    async function processUpload(input) {
+      if (!input.files[0]) return null;
+      const file = input.files[0];
+      const reader = new FileReader();
+      return new Promise((resolve, reject) => {
+        reader.onload = async function(e) {
+          const base64 = e.target.result;
+          const fileName = 'img_' + new Date().getTime();
+          const res = await api('uploadImage', { base64: base64, fileName: fileName });
+          if (res.success) resolve(res.url);
+          else reject(res.message);
+        };
+        reader.readAsDataURL(file);
+      });
     }
-  </script>
+
+    function toggleSidebar() { $('sidebar').classList.toggle('-translate-x-full'); }
+</script>
 </body>
 </html>
