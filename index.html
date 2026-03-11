@@ -35,11 +35,7 @@
     @keyframes spin { to { transform: rotate(360deg); } }
     .file-input-label { cursor: pointer; transition: all 0.2s; }
     .file-input-label:hover { background: #f1f5f9; }
-    @media print {
-      body * { visibility: hidden; }
-      #print-area, #print-area * { visibility: visible; }
-      #print-area { position: absolute; left: 0; top: 0; width: 100%; }
-    }
+    @media print { body * { visibility: hidden; } #print-area, #print-area * { visibility: visible; } #print-area { position: absolute; left: 0; top: 0; width: 100%; } }
   </style>
 </head>
 <body class="bg-pattern overflow-x-hidden">
@@ -111,21 +107,32 @@
           </div>
         </section>
 
-        <!-- BUAT UJIAN (MULTI STEP) -->
+        <!-- BUAT UJIAN -->
         <section id="guru-buat" class="hidden">
           <h2 class="text-xl font-bold mb-4 text-slate-800">Buat Ujian Baru</h2>
-          
-          <!-- Step 1: Info Umum -->
           <div id="form-step-1" class="card p-6">
             <h3 class="font-bold text-slate-700 mb-3">Langkah 1: Informasi Ujian</h3>
             <div class="grid grid-cols-2 gap-3 mb-3">
-              <select id="add-mapel" class="input-field rounded-lg p-2.5"><option>Matematika</option><option>B.Indonesia</option><option>Produktif</option></select>
+              <input type="text" id="add-mapel" class="input-field rounded-lg p-2.5" placeholder="Mata Pelajaran">
               <input type="number" id="add-waktu" value="60" class="input-field rounded-lg p-2.5" placeholder="Waktu (Menit)">
             </div>
             <div class="grid grid-cols-2 gap-3 mb-3">
-              <select id="add-kelas" class="input-field rounded-lg p-2.5"><option>X</option><option>XI</option><option>XII</option></select>
+              <select id="add-kelas" class="input-field rounded-lg p-2.5"><option>X</option><option>XI</option><option>XII</option><option>SEMUA</option></select>
               <select id="add-jurusan" class="input-field rounded-lg p-2.5"><option>ATP</option><option>ATU</option><option>APPL</option><option>SEMUA</option></select>
             </div>
+            
+            <!-- FITUR BARU: Jenis & Tahun Ajaran -->
+            <div class="grid grid-cols-2 gap-3 mb-3">
+               <select id="add-jenis" class="input-field rounded-lg p-2.5">
+                 <option value="STS Ganjil">STS Ganjil</option>
+                 <option value="STS Genap">STS Genap</option>
+                 <option value="PAS">PAS</option>
+                 <option value="PAT">PAT</option>
+                 <option value="Ulangan Harian">Ulangan Harian</option>
+               </select>
+               <input type="text" id="add-tahun" class="input-field rounded-lg p-2.5" placeholder="2024/2025" value="2024/2025">
+            </div>
+            
             <div class="mb-3">
               <label class="text-sm text-slate-600">Jumlah Soal</label>
               <input type="number" id="add-jumlah" min="1" value="1" class="input-field w-full rounded-lg p-2.5" placeholder="Jumlah Soal">
@@ -133,7 +140,6 @@
             <button onclick="nextStepCreate()" class="btn-brand w-full py-2 rounded-lg">Lanjut Buat Soal</button>
           </div>
 
-          <!-- Step 2: Detail Soal -->
           <div id="form-step-2" class="hidden card p-6 mt-4">
             <div class="flex justify-between items-center mb-3">
               <h3 class="font-bold text-slate-700">Langkah 2: Input Soal</h3>
@@ -157,6 +163,8 @@
         <!-- PENILAIAN -->
         <section id="guru-nilai" class="hidden">
           <h2 class="text-xl font-bold mb-4 text-slate-800">Penilaian Jawaban</h2>
+          
+          <!-- FILTER LENGKAP -->
           <div class="card p-4 mb-4 flex flex-wrap gap-2 items-end">
             <div>
               <label class="text-xs text-slate-500">Kelas</label>
@@ -166,17 +174,24 @@
               <label class="text-xs text-slate-500">Jurusan</label>
               <select id="filter-jurusan" onchange="loadGradingList()" class="input-field p-2 rounded text-sm"><option value="">Semua</option><option>ATP</option><option>ATU</option><option>APPL</option></select>
             </div>
-          </div>
-          <div id="list-grading" class="space-y-3"></div>
-          
-          <!-- Modal Penilaian Detail -->
-          <div id="modal-grade" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-            <div class="bg-white rounded-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6 relative">
-              <button onclick="closeModal()" class="absolute top-2 right-2 text-slate-400 hover:text-red-500">Tutup</button>
-              <h3 class="font-bold text-lg mb-4">Penilaian: <span id="modal-nama"></span></h3>
-              <div id="detail-jawaban" class="space-y-4"></div>
+            <!-- Filter Baru -->
+            <div>
+              <label class="text-xs text-slate-500">Jenis Ujian</label>
+              <select id="filter-jenis" onchange="loadGradingList()" class="input-field p-2 rounded text-sm">
+                <option value="">Semua Jenis</option>
+                <option value="STS Ganjil">STS Ganjil</option>
+                <option value="STS Genap">STS Genap</option>
+                <option value="PAS">PAS</option>
+                <option value="PAT">PAT</option>
+              </select>
+            </div>
+            <div>
+              <label class="text-xs text-slate-500">Tahun Ajaran</label>
+              <input type="text" id="filter-tahun" onchange="loadGradingList()" class="input-field p-2 rounded text-sm w-28" placeholder="2024/2025">
             </div>
           </div>
+
+          <div id="list-grading" class="space-y-3"></div>
         </section>
 
         <!-- RECAP NILAI -->
@@ -188,10 +203,20 @@
               Cetak
             </button>
           </div>
+          
+          <!-- Filter Rekap -->
           <div class="card p-4 mb-4 flex gap-2">
              <select id="rekap-kelas" onchange="loadRecap()" class="input-field p-2 rounded text-sm"><option value="">Semua Kelas</option><option>X</option><option>XI</option><option>XII</option></select>
              <select id="rekap-jurusan" onchange="loadRecap()" class="input-field p-2 rounded text-sm"><option value="">Semua Jurusan</option><option>ATP</option><option>ATU</option><option>APPL</option></select>
+             <select id="rekap-jenis" onchange="loadRecap()" class="input-field p-2 rounded text-sm">
+                <option value="">Semua Jenis</option>
+                <option value="STS Ganjil">STS Ganjil</option>
+                <option value="STS Genap">STS Genap</option>
+                <option value="PAS">PAS</option>
+             </select>
+             <input type="text" id="rekap-tahun" onchange="loadRecap()" class="input-field p-2 rounded text-sm w-28" placeholder="2024/2025">
           </div>
+
           <div id="print-area" class="card overflow-x-auto">
             <table class="w-full text-sm" id="table-recap">
               <thead class="bg-slate-50 border-b">
@@ -210,6 +235,15 @@
         </section>
 
       </main>
+    </div>
+    
+    <!-- MODAL PENILAIAN -->
+    <div id="modal-grade" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+      <div class="bg-white rounded-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6 relative">
+        <button onclick="closeModal()" class="absolute top-2 right-2 text-slate-400 hover:text-red-500 text-xl">&times;</button>
+        <h3 class="font-bold text-lg mb-4">Penilaian: <span id="modal-nama"></span></h3>
+        <div id="detail-jawaban" class="space-y-4"></div>
+      </div>
     </div>
   </div>
 
@@ -262,16 +296,11 @@
 
 <script>
     // ================= KONFIGURASI =================
-    const API_URL = 'https://script.google.com/macros/s/AKfycbx-qQ0rqjOd_BxSbl5-ToWCrmSVfCc33xcAu7NGmC2ukSosIkl740fBIadDSaGIYLuYdA/exec'; 
+    const API_URL = 'https://script.google.com/macros/s/AKfycbyAf89Q-ua2kctaqOpb68btlVvJLGVeHwYnTVagictTHaTVPv57RyiomqOEwEkjNZcv3A/exec'; 
     const $ = id => document.getElementById(id);
     const STATE = { 
-      user: null, 
-      currentExam: null, 
-      questions: [], 
-      answers: {}, 
-      questionCounter: 0, 
-      totalQuestions: 0,
-      tempQuestions: [] // Penampung soal saat pembuatan
+      user: null, currentExam: null, questions: [], answers: {}, 
+      questionCounter: 0, totalQuestions: 0, tempQuestions: [], timer: null
     };
 
     // ================= CORE FUNCTIONS =================
@@ -296,7 +325,7 @@
     // ================= GURU LOGIC =================
     async function LoadGuruHome() {
       const exams = await api('getExams', { guru_id: STATE.user.id });
-      const grading = await api('getGradingList', { guru_id: STATE.user.id });
+      const grading = await api('getGradingList', { guru_id: STATE.user.id }); // Ambil semua untuk stat
       if(exams.success) { $('stat-total').innerText = exams.data.length; $('stat-aktif').innerText = exams.data.filter(e => e.status === 'released').length; }
       if(grading.success) $('stat-pending').innerText = grading.data.filter(s => s.graded < s.answered).length;
     }
@@ -309,145 +338,68 @@
       if(page === 'rekap') loadRecap();
     }
 
-    // --- BUAT UJIAN (FIXED) ---
+    // --- BUAT UJIAN ---
     async function nextStepCreate() {
       const jumlah = parseInt($('add-jumlah').value);
       if(!jumlah || jumlah < 1) return Toast("Jumlah soal tidak valid", "error");
-      
-      // 1. Create Header
       Toast("Membuat header ujian...", "info");
+      
+      // Tambahkan jenis & tahun
       const headerRes = await api('createExam', {
-        guru_id: STATE.user.id,
-        mapel: $('add-mapel').value,
-        kelas: $('add-kelas').value,
-        jurusan: $('add-jurusan').value,
-        waktu: $('add-waktu').value
+        guru_id: STATE.user.id, mapel: $('add-mapel').value, kelas: $('add-kelas').value,
+        jurusan: $('add-jurusan').value, waktu: $('add-waktu').value,
+        jenis_ujian: $('add-jenis').value, tahun_ajaran: $('add-tahun').value
       });
-
+      
       if(!headerRes.success) return Toast("Gagal membuat header: " + headerRes.message, "error");
-
-      // 2. Setup State for Step 2
       STATE.currentExamId = headerRes.data.id;
-      STATE.totalQuestions = jumlah;
-      STATE.questionCounter = 0;
-      STATE.tempQuestions = [];
+      STATE.totalQuestions = jumlah; STATE.questionCounter = 0; STATE.tempQuestions = [];
       for(let i=0; i<jumlah; i++) STATE.tempQuestions.push({ nomor: i+1, text: '', image: '', file: null });
-
-      // 3. Switch UI
-      $('form-step-1').classList.add('hidden');
-      $('form-step-2').classList.remove('hidden');
+      $('form-step-1').classList.add('hidden'); $('form-step-2').classList.remove('hidden');
       renderQuestionForm();
     }
 
     function renderQuestionForm() {
       const q = STATE.tempQuestions[STATE.questionCounter];
       $('step-info').innerText = `Soal ${q.nomor} dari ${STATE.totalQuestions}`;
-      
       const container = $('question-container');
-      container.innerHTML = `
-        <textarea id="q-text" rows="4" class="input-field w-full rounded-lg p-3 mb-2" placeholder="Tulis soal nomor ${q.nomor}...">${q.text}</textarea>
+      container.innerHTML = `<textarea id="q-text" rows="4" class="input-field w-full rounded-lg p-3 mb-2" placeholder="Tulis soal nomor ${q.nomor}...">${q.text}</textarea>
         <label class="file-input-label flex items-center gap-2 p-2 bg-slate-50 border rounded text-sm text-slate-600">
            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
            <span id="file-label">${q.image ? 'Gambar Terupload' : 'Upload Gambar (Opsional)'}</span>
            <input type="file" id="q-file" accept="image/*" class="hidden" onchange="handleFileSelect(this)">
-        </label>
-      `;
-      
-      // Button Logic
+        </label>`;
       $('prev-q-btn').classList.toggle('hidden', STATE.questionCounter === 0);
-      if(STATE.questionCounter === STATE.totalQuestions - 1) {
-        $('next-q-btn').classList.add('hidden');
-        $('save-exam-btn').classList.remove('hidden');
-      } else {
-        $('next-q-btn').classList.remove('hidden');
-        $('save-exam-btn').classList.add('hidden');
-      }
+      if(STATE.questionCounter === STATE.totalQuestions - 1) { $('next-q-btn').classList.add('hidden'); $('save-exam-btn').classList.remove('hidden'); } 
+      else { $('next-q-btn').classList.remove('hidden'); $('save-exam-btn').classList.add('hidden'); }
     }
 
-    function handleFileSelect(input) {
-       if(input.files[0]) {
-         STATE.tempQuestions[STATE.questionCounter].file = input.files[0];
-         $('file-label').innerText = input.files[0].name;
-       }
-    }
-
-    function saveCurrentQuestion() {
-      STATE.tempQuestions[STATE.questionCounter].text = $('q-text').value;
-    }
-
-    async function nextQuestion() {
-      saveCurrentQuestion();
-      // Upload jika ada file baru
-      const q = STATE.tempQuestions[STATE.questionCounter];
-      if(q.file) {
-         try { q.image = await processUpload({ files: [q.file] }); } 
-         catch(e) { Toast("Gagal upload gambar", "error"); return; }
-      }
-      
-      if(STATE.questionCounter < STATE.totalQuestions - 1) {
-        STATE.questionCounter++;
-        renderQuestionForm();
-      }
-    }
-
-    function prevQuestion() {
-      saveCurrentQuestion();
-      if(STATE.questionCounter > 0) {
-        STATE.questionCounter--;
-        renderQuestionForm();
-      }
-    }
-
-    async function saveAllExam() {
-      saveCurrentQuestion();
-      // Upload last if needed
-      const q = STATE.tempQuestions[STATE.questionCounter];
-      if(q.file) {
-         try { q.image = await processUpload({ files: [q.file] }); } 
-         catch(e) { Toast("Gagal upload gambar", "error"); return; }
-      }
-
-      // Save All
-      Toast("Menyimpan soal...", "info");
-      const questionsToSave = STATE.tempQuestions.map(q => ({ nomor: q.nomor, text: q.text, image: q.image || '' }));
-      
+    function handleFileSelect(input) { if(input.files[0]) { STATE.tempQuestions[STATE.questionCounter].file = input.files[0]; $('file-label').innerText = input.files[0].name; } }
+    function saveCurrentQuestion() { STATE.tempQuestions[STATE.questionCounter].text = $('q-text').value; }
+    async function nextQuestion() { saveCurrentQuestion(); const q = STATE.tempQuestions[STATE.questionCounter]; if(q.file) { try { q.image = await processUpload({ files: [q.file] }); } catch(e) { Toast("Gagal upload gambar", "error"); return; } } if(STATE.questionCounter < STATE.totalQuestions - 1) { STATE.questionCounter++; renderQuestionForm(); } }
+    function prevQuestion() { saveCurrentQuestion(); if(STATE.questionCounter > 0) { STATE.questionCounter--; renderQuestionForm(); } }
+    async function saveAllExam() { saveCurrentQuestion(); const q = STATE.tempQuestions[STATE.questionCounter]; if(q.file) { try { q.image = await processUpload({ files: [q.file] }); } catch(e) { Toast("Gagal upload gambar", "error"); return; } }
+      Toast("Menyimpan soal...", "info"); const questionsToSave = STATE.tempQuestions.map(q => ({ nomor: q.nomor, text: q.text, image: q.image || '' }));
       const res = await api('saveQuestions', { exam_id: STATE.currentExamId, questions: questionsToSave });
-      if(res.success) {
-        Toast("Ujian berhasil disimpan!");
-        $('form-step-1').classList.remove('hidden');
-        $('form-step-2').classList.add('hidden');
-        LoadGuruHome();
-        PageGuru('bank');
-      } else {
-        Toast(res.message, "error");
-      }
+      if(res.success) { Toast("Ujian berhasil disimpan!"); $('form-step-1').classList.remove('hidden'); $('form-step-2').classList.add('hidden'); LoadGuruHome(); PageGuru('bank'); } else Toast(res.message, "error");
     }
 
     // --- BANK UJIAN ---
-    async function loadExams() {
-      const res = await api('getExams', { guru_id: STATE.user.id });
-      const list = $('list-exams');
-      if(!res.success) return;
-      list.innerHTML = res.data.map(e => `
-        <div class="card p-4 flex justify-between items-center">
-          <div>
-            <p class="font-bold">${e.mapel} <span class="text-xs text-slate-400">(Kelas ${e.kelas})</span></p>
-            <p class="text-sm text-slate-500">Jurusan: ${e.jurusan} | Waktu: ${e.waktu} menit</p>
-            <span class="text-xs px-2 py-1 rounded ${e.status === 'released' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'}">${e.status === 'released' ? 'Token: ' + e.token : 'Draft'}</span>
-          </div>
-          <div class="flex gap-2">
-             ${e.status === 'draft' ? `<button onclick="rilisToken('${e.id}')" class="btn-brand text-xs px-3 py-1 rounded">Rilis</button>` : ''}
-             <button onclick="hapusExam('${e.id}')" class="text-red-500 text-xs px-2">Hapus</button>
-          </div>
-        </div>
-      `).join('');
-    }
+    async function loadExams() { const res = await api('getExams', { guru_id: STATE.user.id }); const list = $('list-exams'); if(!res.success) return; list.innerHTML = res.data.map(e => `<div class="card p-4 flex justify-between items-center"><div><p class="font-bold">${e.mapel} <span class="text-xs text-slate-400">(Kelas ${e.kelas})</span></p><p class="text-sm text-slate-500">Jurusan: ${e.jurusan} | Waktu: ${e.waktu} menit</p><div class="flex gap-2 mt-1"><span class="text-xs px-2 py-1 rounded ${e.status === 'released' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'}">${e.status === 'released' ? 'Token: ' + e.token : 'Draft'}</span><span class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded">${e.jenis_ujian || '-'}</span><span class="text-xs px-2 py-1 bg-slate-100 text-slate-600 rounded">${e.tahun_ajaran || '-'}</span></div></div><div class="flex gap-2">${e.status === 'draft' ? `<button onclick="rilisToken('${e.id}')" class="btn-brand text-xs px-3 py-1 rounded">Rilis</button>` : ''}<button onclick="hapusExam('${e.id}')" class="text-red-500 text-xs px-2">Hapus</button></div></div>`).join(''); }
     async function rilisToken(id) { const res = await api('releaseToken', { exam_id: id }); if(res.success) { Toast("Token: " + res.data.token); loadExams(); } }
     async function hapusExam(id) { if(confirm('Hapus?')) { await api('deleteExam', { id: id }); loadExams(); LoadGuruHome(); } }
 
-    // --- PENILAIAN ---
+    // --- PENILAIAN DENGAN FILTER BARU ---
     async function loadGradingList() {
-      const res = await api('getGradingList', { guru_id: STATE.user.id, kelas: $('filter-kelas').value, jurusan: $('filter-jurusan').value });
+      // Kirim semua parameter filter
+      const res = await api('getGradingList', { 
+        guru_id: STATE.user.id, 
+        kelas: $('filter-kelas').value, 
+        jurusan: $('filter-jurusan').value,
+        jenis_ujian: $('filter-jenis').value,
+        tahun_ajaran: $('filter-tahun').value
+      });
+      
       const list = $('list-grading');
       if(!res.success) return;
       list.innerHTML = res.data.map(s => `
@@ -456,12 +408,17 @@
              <p class="font-bold">${s.nama}</p>
              <p class="text-xs text-slate-500">${s.kelas} - ${s.jurusan} | Mapel: ${s.mapel}</p>
              <p class="text-xs text-sky-600">Dijawab: ${s.answered} | Dinilai: ${s.graded}</p>
+             <div class="flex gap-2 mt-1">
+                <span class="text-xs px-2 py-0.5 bg-blue-100 text-blue-700 rounded">${s.jenis_ujian || '-'}</span>
+                <span class="text-xs px-2 py-0.5 bg-slate-100 text-slate-600 rounded">${s.tahun_ajaran || '-'}</span>
+             </div>
           </div>
           <button onclick="openGradeModal('${s.siswa_id}', '${s.exam_id}', '${s.nama}')" class="btn-brand text-xs px-3 py-1 rounded">Nilai</button>
         </div>
       `).join('');
     }
 
+    // --- MODAL PENILAIAN ---
     async function openGradeModal(siswaId, examId, nama) {
       $('modal-nama').innerText = nama;
       $('modal-grade').classList.remove('hidden');
@@ -476,19 +433,33 @@
           ${d.jawaban_image ? `<a href="${d.jawaban_image}" target="_blank" class="text-xs text-sky-500 underline mb-2 block">Lihat Foto</a>` : ''}
           <div class="flex items-center gap-2 mt-1">
              <input type="number" id="n-${d.id}" value="${d.nilai || ''}" class="input-field p-2 w-20 text-sm rounded" placeholder="Nilai">
-             <button onclick="saveSingleNilai('${d.id}')" class="bg-teal-500 text-white px-3 py-1 text-xs rounded">Simpan</button>
           </div>
         </div>
-      `).join('');
+      `).join('') + `<button onclick="saveAllNilaiBatch()" class="btn-brand w-full mt-4 py-2 rounded font-bold">Simpan Semua Nilai</button>`;
     }
-    async function saveSingleNilai(id) { await api('updateNilai', { id: id, nilai: $(`n-${id}`).value }); Toast("Nilai disimpan"); }
+
+    async function saveAllNilaiBatch() {
+      const inputs = $('detail-jawaban').querySelectorAll('input[type="number"]');
+      let grades = [];
+      inputs.forEach(input => { if(input.value !== '') grades.push({ id: input.id.replace('n-', ''), nilai: input.value }); });
+      if(grades.length === 0) return Toast("Tidak ada nilai yang diisi", "error");
+      const res = await api('updateNilaiBatch', { grades: grades });
+      if(res.success) { Toast("Semua nilai berhasil disimpan"); closeModal(); loadGradingList(); LoadGuruHome(); } else Toast("Gagal menyimpan", "error");
+    }
+
     function closeModal() { $('modal-grade').classList.add('hidden'); }
 
     // --- RECAP ---
     async function loadRecap() {
-      const res = await api('getRecap', { guru_id: STATE.user.id, kelas: $('rekap-kelas').value, jurusan: $('rekap-jurusan').value });
-      const tbody = $('body-rekap');
-      if(!res.success) return;
+      const res = await api('getRecap', { 
+        guru_id: STATE.user.id, 
+        kelas: $('rekap-kelas').value, 
+        jurusan: $('rekap-jurusan').value,
+        jenis_ujian: $('rekap-jenis').value,
+        tahun_ajaran: $('rekap-tahun').value
+      });
+      
+      const tbody = $('body-recap'); if(!res.success) return;
       tbody.innerHTML = res.data.map((s, i) => {
         let mapelList = Object.entries(s.nilaiMapel).map(([k, v]) => `${k}: ${v}`).join(', ');
         let total = Object.values(s.nilaiMapel).reduce((a, b) => a + b, 0);
@@ -498,46 +469,33 @@
     function printRecap() { window.print(); }
 
     // ================= SISWA LOGIC =================
+    let autosaveTimer = null;
+
     async function MulaiUjian(e) {
       e.preventDefault();
       const token = $('input-token').value.toUpperCase();
-      const res = await api('getExamByToken', { token: token });
-      
+      const res = await api('getExamByToken', { token: token, kelas: STATE.user.kelas, jurusan: STATE.user.jurusan });
       if(res.success) {
         STATE.currentExam = res.data.exam;
         STATE.questions = res.data.questions;
         $('uj-mapel').innerText = res.data.exam.mapel;
-        
         const container = $('ujian-container');
-        container.innerHTML = STATE.questions.map(q => `
-          <div class="card p-6">
-            <h3 class="font-bold text-sky-700 mb-2">No. ${q.nomor}</h3>
-            <p class="mb-2 text-slate-800">${q.text}</p>
-            ${q.image ? `<img src="${q.image}" class="mb-4 max-h-60 rounded">` : ''}
-            <textarea id="ans-${q.nomor}" rows="4" class="input-field w-full rounded-lg p-2" placeholder="Jawaban No. ${q.nomor}"></textarea>
-            <label class="file-input-label flex items-center gap-2 p-2 bg-slate-50 border rounded mt-2 text-sm text-slate-600">
-               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-               <span>Foto Jawaban (Opsional)</span>
-               <input type="file" id="file-${q.nomor}" accept="image/*" class="hidden">
-            </label>
-          </div>
-        `).join('');
-
+        container.innerHTML = `<div class="text-right mb-2 text-xs text-slate-400" id="autosave-status"></div>${STATE.questions.map(q => `<div class="card p-6"><h3 class="font-bold text-sky-700 mb-2">No. ${q.nomor}</h3><p class="mb-2 text-slate-800">${q.text}</p>${q.image ? `<img src="${q.image}" class="mb-4 max-h-60 rounded">` : ''}<textarea id="ans-${q.nomor}" rows="4" class="input-field w-full rounded-lg p-2" placeholder="Jawaban No. ${q.nomor}" oninput="triggerAutosave()"></textarea><label class="file-input-label flex items-center gap-2 p-2 bg-slate-50 border rounded mt-2 text-sm text-slate-600"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg><span>Foto Jawaban (Opsional)</span><input type="file" id="file-${q.nomor}" accept="image/*" class="hidden" onchange="triggerAutosave()"></label></div>`).join('')}`;
+        loadAutosavedData();
         STATE.time = (res.data.exam.waktu || 60) * 60;
         clearInterval(STATE.timer);
-        STATE.timer = setInterval(() => {
-          STATE.time--;
-          const m = Math.floor(STATE.time/60); const s = STATE.time%60;
-          $('uj-time').innerText = `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
-          if(STATE.time <= 0) { clearInterval(STATE.timer); SubmitUjian(); }
-        }, 1000);
-
+        STATE.timer = setInterval(() => { STATE.time--; const m = Math.floor(STATE.time/60); const s = STATE.time%60; $('uj-time').innerText = `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`; if(STATE.time <= 0) { clearInterval(STATE.timer); SubmitUjian(); } }, 1000);
         Navigate('ujian');
-      } else Toast('Token tidak valid', 'error');
+      } else Toast(res.message, 'error');
     }
+
+    function triggerAutosave() { clearTimeout(autosaveTimer); autosaveTimer = setTimeout(() => { saveToLocalStorage(); }, 1000); }
+    function saveToLocalStorage() { if (!STATE.currentExam) return; let dataToSave = {}; STATE.questions.forEach(q => { const el = $(`ans-${q.nomor}`); if(el) dataToSave[q.nomor] = el.value; }); localStorage.setItem(`ujian_${STATE.currentExam.id}`, JSON.stringify(dataToSave)); $('autosave-status').innerText = "Jawaban tersimpan otomatis"; $('autosave-status').classList.add('text-teal-600'); setTimeout(() => $('autosave-status').classList.remove('text-teal-600'), 2000); }
+    function loadAutosavedData() { if (!STATE.currentExam) return; const saved = localStorage.getItem(`ujian_${STATE.currentExam.id}`); if (saved) { try { const data = JSON.parse(saved); Object.keys(data).forEach(nomor => { const el = $(`ans-${nomor}`); if (el) el.value = data[nomor]; }); Toast("Jawaban sebelumnya dipulihkan", "success"); } catch (e) {} } }
 
     async function SubmitUjian() {
       if(!confirm('Yakin submit?')) return;
+      clearTimeout(autosaveTimer);
       let answers = [];
       for(let q of STATE.questions) {
         let text = $(`ans-${q.nomor}`).value;
@@ -546,14 +504,8 @@
         if(fileInput.files[0]) image = await processUpload(fileInput);
         answers.push({ nomor: q.nomor, text: text, image: image });
       }
-
-      const res = await api('submitAnswers', {
-        exam_id: STATE.currentExam.id, siswa_id: STATE.user.id, nama_siswa: STATE.user.nama,
-        kelas: STATE.user.kelas, jurusan: STATE.user.jurusan, answers: answers
-      });
-
-      if(res.success) { clearInterval(STATE.timer); Navigate('selesai'); } 
-      else Toast(res.message, 'error');
+      const res = await api('submitAnswers', { exam_id: STATE.currentExam.id, siswa_id: STATE.user.id, nama_siswa: STATE.user.nama, kelas: STATE.user.kelas, jurusan: STATE.user.jurusan, answers: answers });
+      if(res.success) { clearInterval(STATE.timer); localStorage.removeItem(`ujian_${STATE.currentExam.id}`); Navigate('selesai'); } else Toast(res.message, 'error');
     }
 
     // --- HELPER ---
